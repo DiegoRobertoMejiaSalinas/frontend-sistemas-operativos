@@ -1,0 +1,166 @@
+/*
+* See: https://compass.com/ucfe-assets/fonts/3.5.1/license.txt
+*/
+
+
+@font-face {
+  font-family: 'Compass Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSans-Regular.woff2") format('woff2'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSans-Regular.woff") format('woff'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSans-Regular.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'Compass Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: fallback;
+  src: url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSans-Medium.woff2") format('woff2'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSans-Medium.woff") format('woff'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSans-Medium.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'Compass Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: fallback;
+  src: url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSans-Bold.woff2") format('woff2'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSans-Bold.woff") format('woff'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSans-Bold.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/OpenSans-Regular.woff2") format('woff2'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/OpenSans-Regular.woff") format('woff'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/OpenSans-Regular.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: fallback;
+  src: url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/OpenSans-SemiBold.woff2") format('woff2'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/OpenSans-SemiBold.woff") format('woff'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/OpenSans-SemiBold.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'Compass Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSerif-Regular.woff2") format('woff2'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSerif-Regular.woff") format('woff'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSerif-Regular.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'Compass Serif';
+  font-style: normal;
+  font-weight: 600;
+  font-display: fallback;
+  src: url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSerif-SemiBold.woff2") format('woff2'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSerif-SemiBold.woff") format('woff'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSerif-SemiBold.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: 'Compass Serif';
+  font-style: normal;
+  font-weight: 700;
+  font-display: fallback;
+  src: url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSerif-Bold.woff2") format('woff2'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSerif-Bold.woff") format('woff'),
+       url("//d11k51v32u8ru4.cloudfront.net/fonts/3.5.1/CompassSerif-Bold.ttf") format('truetype');
+}
+
+:root {
+  --font-familySans: "Compass Sans", Helvetica, Arial, sans-serif;
+  --font-familyLegible: "Open Sans", Helvetica, Arial, sans-serif;
+  --font-familySerif: "Compass Serif", Times, "Times New Roman", serif;
+  --font-weightRegular: 400;
+  --font-weightMedium: 500;
+  --font-weightBold: 700;
+  --font-weightSemiBold: 600;
+}
+
+.font-sansRegular {
+  font-family: var(--font-familySans, "Compass Sans", Helvetica, Arial, sans-serif);
+  font-weight: var(--font-weightRegular, 400);
+  font-style: normal;
+}
+
+.font-sansMedium {
+  font-family: var(--font-familySans, "Compass Sans", Helvetica, Arial, sans-serif);
+  font-weight: var(--font-weightMedium, 500);
+  font-style: normal;
+}
+
+.font-sansBold {
+  font-family: var(--font-familySans, "Compass Sans", Helvetica, Arial, sans-serif);
+  font-weight: var(--font-weightBold, 700);
+  font-style: normal;
+}
+
+.font-legibleRegular {
+  font-family: var(--font-familyLegible, "Open Sans", Helvetica, Arial, sans-serif);
+  font-weight: var(--font-weightRegular, 400);
+  font-style: normal;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  font-smoothing: auto;
+}
+
+.font-legibleSemiBold {
+  font-family: var(--font-familyLegible, "Open Sans", Helvetica, Arial, sans-serif);
+  font-weight: var(--font-weightSemiBold, 600);
+  font-style: normal;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  font-smoothing: auto;
+}
+
+.font-serifRegular {
+  font-family: var(--font-familySerif, "Compass Serif", Times, "Times New Roman", serif);
+  font-weight: var(--font-weightRegular, 400);
+  font-style: normal;
+}
+
+.font-serifSemiBold {
+  font-family: var(--font-familySerif, "Compass Serif", Times, "Times New Roman", serif);
+  font-weight: var(--font-weightSemiBold, 600);
+  font-style: normal;
+}
+
+.font-serifBold {
+  font-family: var(--font-familySerif, "Compass Serif", Times, "Times New Roman", serif);
+  font-weight: var(--font-weightBold, 700);
+  font-style: normal;
+}
+
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.noLigatures {
+  font-variant-ligatures: none;
+}
+
+.noFontSmoothing {
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  font-smoothing: auto;
+}
