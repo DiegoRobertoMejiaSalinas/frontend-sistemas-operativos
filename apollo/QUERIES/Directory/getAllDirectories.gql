@@ -1,0 +1,22 @@
+query{
+  directory{
+    id
+    name
+    slug
+    readable
+    writable
+    user{
+      id
+      name
+      role{
+        id
+        name
+      }
+    }
+    belongsTo{
+      id
+      name
+      slug
+    }
+  }
+}

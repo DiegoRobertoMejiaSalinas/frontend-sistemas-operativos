@@ -1,0 +1,21 @@
+query Directory($input: String!) {
+  directories: directoryBySameFather(id: $input) {
+    id
+    name
+    slug
+    readable
+    writable
+    user {
+      name
+      role {
+        id
+        name
+      }
+    }
+    belongsTo {
+      id
+      name
+      slug
+    }
+  }
+}
