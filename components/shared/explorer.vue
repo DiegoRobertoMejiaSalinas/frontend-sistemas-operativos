@@ -3,7 +3,7 @@
     <div class="outer-wrapper">
       <div class="action-bar">
         <div class="return-actions">
-          <img
+          <img v-if="folder.id != 1"
             @click="goBack"
             src="~@/assets/images/explorer/back.svg"
             alt=""
