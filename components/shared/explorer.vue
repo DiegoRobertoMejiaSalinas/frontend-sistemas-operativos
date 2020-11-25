@@ -20,7 +20,7 @@
         </div>
       </div>
       <div
-        @contextmenu.prevent.stop="handleClick($event, data)"
+        @contextmenu.prevent.stop="handleClick($event)"
         class="content-explorer"
       >
         <div class="folder-wrapper" v-if="subfolders.length > 0">
@@ -37,7 +37,7 @@
       :elementId="'explorerId'"
       :options="options"
       ref="vueSimpleContextMenu"
-      @option-clicked="optionClicked"
+      @option-clicked="optionClicked($event)"
     >
     </vue-context>
   </div>
@@ -106,14 +106,19 @@
 import getDirectoryByFather from "~/apollo/QUERIES/Directory/getDirectoriesByFather.gql";
 import getDirectoryById from "~/apollo/QUERIES/Directory/getDetailedDirectory.gql"
 
+// Mixins
+import ContextMenu from "~/mixins/contextMenu.js";
+
 // Components Base
 import Directory from "~/components/shared/directory.vue";
 export default {
+  mixins: [ContextMenu],
   data() {
     return {
       subfolders: [],
       options: [
         {
+         
           name: "Crear Carpeta",
           slug: "mkdir",
         },
@@ -152,7 +157,7 @@ export default {
     },
 
     optionClicked(event) {
-      window.alert(JSON.stringify(event));
+      this.switchOption(event.option.slug, "");
     },
     goBack() {
       // this.getFolders(this.folder.belongsTo.id);

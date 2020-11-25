@@ -1,7 +1,11 @@
 export const state = () => ({
   number: 2,
   openExplorer: false,
-  activeFolder: null
+  activeFolder: null,
+
+  typeClipboard: "",
+  clipboard: null,
+  idClipboard: null
 });
 
 export const mutations = {
@@ -19,6 +23,17 @@ export const mutations = {
   },
   CLEAN_FOLDER(state) {
     state.activeFolder = null;
+  },
+  SET_TYPE_CLIPBOARD(state, string) {
+    state.typeClipboard = string;
+  },
+  SET_CLIPBOARD(state, item) {
+    state.clipboard = item;
+    state.idClipboard = item.id;
+  },
+  CLEAN_CLIPBOARD(state) {
+    state.clipboard = null;
+    state.idClipboard = null;
   }
 };
 
@@ -34,7 +49,21 @@ export const actions = {
     context.commit("SET_FOLDER", folder);
     context.commit("OPEN_EXPLORER");
   },
-  setFolder(context, folder){
+  setFolder(context, folder) {
     context.commit("SET_FOLDER", folder);
+  },
+  setClipboard(context, folder) {
+    context.commit("SET_CLIPBOARD", folder);
+  },
+  cleanClipboard(context) {
+    context.commit("CLEAN_CLIPBOARD");
+  },
+  cutClipboard(context, folder) {
+    context.commit("SET_TYPE_CLIPBOARD", "cut");
+    context.commit("SET_CLIPBOARD", folder);
+  },
+  copyClipboard(context, folder) {
+    context.commit("SET_TYPE_CLIPBOARD", "copy");
+    context.commit("SET_CLIPBOARD", folder);
   }
 };

@@ -3,7 +3,7 @@
     v-if="data"
     @dblclick="openExplorer(data)"
     @contextmenu.prevent.stop="handleClick($event, data)"
-    class="directory-wrapper mx-10 mt-3"
+    class="directory-wrapper mx-10 mt-3" :class="isSameIdClipboard && isCutClipboard ? 'active' : ''"
   >
     <img src="~@/assets/images/base/folder.svg" alt="" />
     <p>{{ data.name }}</p>
@@ -11,14 +11,17 @@
     <vue-context
       :elementId="'directoryId'"
       :options="options"
-      ref="vueSimpleContextMenu"
-      @option-clicked="optionClicked"
+      ref="vueSimpleContextMenuDirectory"
+      @option-clicked="optionClicked($event)"
     >
     </vue-context>
   </div>
 </template>
 
 <script>
+// Mixins
+import ContextMenu from "~/mixins/contextMenu.js";
+
 export default {
   props: {
     data: {
@@ -26,6 +29,7 @@ export default {
       type: Object,
     },
   },
+  mixins: [ContextMenu],
   data() {
     return {
       options: [
@@ -65,16 +69,24 @@ export default {
       ],
     };
   },
+  computed: {
+    isSameIdClipboard(){
+      return this.$store.state.idClipboard == this.data.id
+    },
+    isCutClipboard(){
+      return this.$store.state.typeClipboard == 'cut'
+    }
+  },
   methods: {
     openExplorer(data) {
       this.$store.dispatch("openExplorer", data);
     },
     handleClick(event, item) {
-      this.$refs.vueSimpleContextMenu.showMenu(event, item);
+      this.$store.dispatch("editor/setFolder", item)
+      this.$refs.vueSimpleContextMenuDirectory.showMenu(event, item);
     },
-
     optionClicked(event) {
-      console.log(JSON.stringify(event));
+      this.switchOption(event.option.slug);
     },
   },
 };
@@ -85,6 +97,16 @@ export default {
   position: relative;
   display: inline-block;
   cursor: pointer;
+
+  &.active{
+    // background: rgba(108, 92, 231, .6);
+    z-index: 80;
+
+    img, p{
+    opacity: .6;
+
+    }
+  }
   img {
     width: 40px;
   }
