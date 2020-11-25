@@ -1,7 +1,20 @@
 <template>
-  <div  v-if="data" @dblclick="openExplorer(data)" class="directory-wrapper mx-10 mt-3">
-    <img  src="~@/assets/images/base/folder.svg" alt="" />
+  <div
+    v-if="data"
+    @dblclick="openExplorer(data)"
+    @contextmenu.prevent.stop="handleClick($event, data)"
+    class="directory-wrapper mx-10 mt-3"
+  >
+    <img src="~@/assets/images/base/folder.svg" alt="" />
     <p>{{ data.name }}</p>
+
+    <vue-context
+      :elementId="'directoryId'"
+      :options="options"
+      ref="vueSimpleContextMenu"
+      @option-clicked="optionClicked"
+    >
+    </vue-context>
   </div>
 </template>
 
@@ -13,11 +26,57 @@ export default {
       type: Object,
     },
   },
+  data() {
+    return {
+      options: [
+        {
+          name: "Editar",
+          slug: "edit",
+        },
+        {
+          type: "divider",
+        },
+        {
+          name: "Cortar",
+          slug: "cut",
+        },
+        {
+          name: "Copiar",
+          slug: "copy",
+        },
+         {
+          type: "divider",
+        },
+        {
+          name: "Eliminar",
+          slug: "delete",
+        },
+        {
+          type: "divider",
+        },
+          {
+          name: "Permisos",
+          slug: "chmod",
+        },
+         {
+          name: "Propietario",
+          slug: "chown",
+        },
+      ],
+    };
+  },
   methods: {
-    openExplorer(data){
-      this.$store.dispatch("openExplorer", data)
+    openExplorer(data) {
+      this.$store.dispatch("openExplorer", data);
     },
-  }
+    handleClick(event, item) {
+      this.$refs.vueSimpleContextMenu.showMenu(event, item);
+    },
+
+    optionClicked(event) {
+      console.log(JSON.stringify(event));
+    },
+  },
 };
 </script>
 

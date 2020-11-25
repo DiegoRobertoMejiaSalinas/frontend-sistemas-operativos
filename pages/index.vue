@@ -1,12 +1,20 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" @contextmenu.prevent.stop="handleClick($event, data)">
     <div class="background">
       <img src="~@/assets/images/desktop/background.jpg" alt="" />
     </div>
-    <div class="inner-wrapper">
+    <div class="inner-wrapper" >
       <Directory v-for="folder of folders" :key="folder.id" :data="folder" />
       <Explorer v-if="!!explorerOpen" />
     </div>
+
+     <vue-context
+      :elementId="'mainId'"
+      :options="options"
+      ref="vueSimpleContextMenu"
+      @option-clicked="optionClicked"
+    >
+    </vue-context>
   </div>
 </template>
 
@@ -22,6 +30,23 @@ export default {
   data() {
     return {
       folders: [],
+       options: [
+        {
+          name: "Crear Carpeta",
+          slug: "mkdir",
+        },
+        {
+          name: "Crear Archivo",
+          slug: "vim",
+        },
+        {
+          type: "divider",
+        },
+          {
+          name: "Pegar",
+          slug: "paste",
+        },
+      ],
     };
   },
   computed: {
@@ -33,6 +58,13 @@ export default {
     this.getRoot();
   },
   methods: {
+     handleClick(event, item) {
+      this.$refs.vueSimpleContextMenu.showMenu(event, item);
+    },
+
+    optionClicked(event) {
+      window.alert(JSON.stringify(event));
+    },
     getRoot() {
       this.$apollo
         .query({
@@ -54,6 +86,7 @@ export default {
 <style lang="scss" scoped>
 .wrapper {
   overflow: hidden;
+  height: 100vh;
   .background {
     position: absolute;
     top: 0;
@@ -67,7 +100,8 @@ export default {
     }
   }
   .inner-wrapper {
-    padding: 80px;
+    padding: 0px;
+    height: 100vh;
   }
 }
 </style>

@@ -3,8 +3,12 @@ query Directory($input: String!) {
     id
     name
     slug
-    readable
-    writable
+    readableRoot
+    writableRoot
+    readableUser
+    writableUser
+    readableGuest
+    writableGuest
     user {
       name
       role {

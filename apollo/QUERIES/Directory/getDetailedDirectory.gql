@@ -1,10 +1,14 @@
 query Directory($input: String!){
-  directories: directoryById(id: $input){
+  directory: directoryById(id: $input){
      id
     name
     slug
-    readable
-    writable
+    readableRoot
+    writableRoot
+    readableUser
+    writableUser
+    readableGuest
+    writableGuest
     user{
       id
       name

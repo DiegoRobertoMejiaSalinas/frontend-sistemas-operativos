@@ -2,13 +2,27 @@
   <div class="explorer-wrapper">
     <div class="outer-wrapper">
       <div class="action-bar">
-        <div></div>
+        <div class="return-actions">
+          <img
+            @click="goBack"
+            src="~@/assets/images/explorer/back.svg"
+            alt=""
+          />
+        </div>
         <p class="name-explorer" v-if="folder">{{ folder.name }}</p>
         <div class="final-actions">
-          <p class="close" @click="closeExplorer">X</p>
+          <img
+            class="close"
+            src="~@/assets/images/explorer/close.svg"
+            @click="closeExplorer"
+            alt=""
+          />
         </div>
       </div>
-      <div class="content-explorer">
+      <div
+        @contextmenu.prevent.stop="handleClick($event, data)"
+        class="content-explorer"
+      >
         <div class="folder-wrapper" v-if="subfolders.length > 0">
           <Directory
             v-for="folder of subfolders"
@@ -18,6 +32,14 @@
         </div>
       </div>
     </div>
+
+    <vue-context
+      :elementId="'explorerId'"
+      :options="options"
+      ref="vueSimpleContextMenu"
+      @option-clicked="optionClicked"
+    >
+    </vue-context>
   </div>
 </template>
 
@@ -34,6 +56,7 @@
   .outer-wrapper {
     max-width: 100%;
     height: 100%;
+
     .action-bar {
       position: absolute;
       height: 40px;
@@ -43,18 +66,25 @@
       justify-content: space-between;
       align-items: center;
       padding: 0 10px;
+      .return-actions {
+        display: flex;
+        align-items: center;
+        img {
+          cursor: pointer;
+          width: 20px;
+        }
+      }
       .name-explorer {
         font-weight: bold;
         color: $white;
         letter-spacing: 2px;
       }
       .final-actions {
-        p {
-          color: $white;
-          padding: 0 10px;
-          &.close {
-            cursor: pointer;
-          }
+        display: flex;
+        align-items: center;
+        img {
+          width: 20px;
+          cursor: pointer;
         }
       }
     }
@@ -74,6 +104,7 @@
 <script>
 // graphql queries
 import getDirectoryByFather from "~/apollo/QUERIES/Directory/getDirectoriesByFather.gql";
+import getDirectoryById from "~/apollo/QUERIES/Directory/getDetailedDirectory.gql"
 
 // Components Base
 import Directory from "~/components/shared/directory.vue";
@@ -81,6 +112,23 @@ export default {
   data() {
     return {
       subfolders: [],
+      options: [
+        {
+          name: "Crear Carpeta",
+          slug: "mkdir",
+        },
+        {
+          name: "Crear Archivo",
+          slug: "vim",
+        },
+        {
+          type: "divider",
+        },
+        {
+          name: "Pegar",
+          slug: "paste",
+        },
+      ],
     };
   },
   computed: {
@@ -94,22 +142,46 @@ export default {
     }
   },
   watch: {
-    folder(val){
-      this.getFolders()
-    }
+    folder(val) {
+      this.getFolders();
+    },
   },
   methods: {
+    handleClick(event, item) {
+      this.$refs.vueSimpleContextMenu.showMenu(event, item);
+    },
+
+    optionClicked(event) {
+      window.alert(JSON.stringify(event));
+    },
+    goBack() {
+      // this.getFolders(this.folder.belongsTo.id);
+      this.getFather(this.folder.belongsTo.id);
+    },
     closeExplorer() {
       this.$store.dispatch("closeExplorer");
     },
-    getFolders() {
-      this.subfolders= []
+    getFather(id) {
+      this.$apollo
+        .query({
+          query: getDirectoryById,
+          fetchPolicy: "network-only",
+          variables: {
+            input: id,
+          },
+        })
+        .then((res) => {
+          this.$store.dispatch("setFolder", res.data.directory)
+        });
+    },
+    getFolders(id) {
+      this.subfolders = [];
       this.$apollo
         .query({
           query: getDirectoryByFather,
-          fetchPolicy: 'network-only',
+          fetchPolicy: "network-only",
           variables: {
-            input: this.folder.id,
+            input: id ? id : this.folder.id,
           },
         })
         .then((res) => {

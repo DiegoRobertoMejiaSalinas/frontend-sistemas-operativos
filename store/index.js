@@ -33,5 +33,8 @@ export const actions = {
   openExplorer(context, folder) {
     context.commit("SET_FOLDER", folder);
     context.commit("OPEN_EXPLORER");
+  },
+  setFolder(context, folder){
+    context.commit("SET_FOLDER", folder);
   }
 };

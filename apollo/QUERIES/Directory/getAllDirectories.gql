@@ -1,10 +1,14 @@
 query{
-  directory{
+  directories{
     id
     name
     slug
-    readable
-    writable
+    readableRoot
+    writableRoot
+    readableUser
+    writableUser
+    readableGuest
+    writableGuest
     user{
       id
       name
