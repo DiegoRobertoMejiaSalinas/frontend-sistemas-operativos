@@ -100,7 +100,6 @@ export default {
 
   &.active{
     // background: rgba(108, 92, 231, .6);
-    z-index: 80;
 
     img, p{
     opacity: .6;

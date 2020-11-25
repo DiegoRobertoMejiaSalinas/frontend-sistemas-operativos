@@ -1,7 +1,8 @@
 export const state = () => ({
   folderToModify: null,
   typeEditor: "Crear",
-  openEditor: false
+  openEditor: false,
+  type: ""
 });
 
 export const mutations = {
@@ -19,6 +20,9 @@ export const mutations = {
   },
   SET_TYPE_EDITOR(state, string) {
     state.typeEditor = string;
+  },
+  SET_TYPE(state, string){
+      state.type= string;
   }
 };
 
@@ -39,19 +43,23 @@ export const actions = {
   //   SPECIFIC CASES
   createFolder(context) {
     context.commit("SET_TYPE_EDITOR", "Crear Directorio");
+    context.commit("SET_TYPE", "folder");
     context.commit("CLEAN_FOLDER_TO_MODIFY");
     context.commit("OPEN_EDITOR");
   },
   createFile(context) {
     context.commit("SET_TYPE_EDITOR", "Crear Archivo");
+    context.commit("SET_TYPE", "file");
     context.commit("CLEAN_FOLDER_TO_MODIFY");
     context.commit("OPEN_EDITOR");
   },
   editFolder(context, file) {
+    context.commit("SET_TYPE", "folder");
     context.commit("SET_TYPE_EDITOR", "Editar Folder " + file.name);
     context.commit("OPEN_EDITOR");
   },
   editFile(context, file) {
+    context.commit("SET_TYPE", "file");
     context.commit("SET_TYPE_EDITOR", "Editar Archivo " + file.name);
     context.commit("OPEN_EDITOR");
   },

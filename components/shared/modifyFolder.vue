@@ -2,7 +2,7 @@
   <div class="editor-wrapper">
     <div class="action-bar">
       <div></div>
-      <div class="name-wrapper">{{message}}</div>
+      <div class="name-wrapper">{{ message }}</div>
       <div class="final-actions">
         <img
           class="close"
@@ -13,13 +13,22 @@
       </div>
     </div>
     <div class="content-wrapper">
-      <div class="inner-content"></div>
+      <div class="inner-content">
+        <img class="image" :src="type == 'folder' ? folder : file" alt="" />
+        <p class="info">Ingrese el nuevo nombre</p>
+        <input class="input" type="text" />
+        <button class="cancel" @click="closeExplorer">Cancelar</button>
+        <button class="submit">Crear</button>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .editor-wrapper {
+  * {
+    font-family: "Ubuntu", sans-serif;
+  }
   position: absolute;
   width: 450px;
   height: 200px;
@@ -60,8 +69,46 @@
     height: 100%;
     background-color: $dark;
 
-    .inner-content-wrapper {
+    .inner-content {
       padding: 60px;
+      display: grid;
+      grid-template-areas:
+        "image info info"
+        "image input input"
+        ". cancel submit";
+      grid-template-columns: 70px 1fr 1fr;
+      grid-template-rows: 20px 40px 40px;
+      align-items: center;
+      grid-gap: 10px;
+      .image {
+        width: 60px;
+        grid-area: image;
+      }
+      .info {
+        grid-area: info;
+        color: $white;
+      }
+      .input {
+        grid-area: input;
+        height: 100%;
+        outline: none;
+        border: none;
+        background: $newdark;
+        color: $white;
+        padding: 0 10px;
+      }
+      .cancel {
+        grid-area: cancel;
+      }
+      .submit {
+        grid-area: submit;
+      }
+      .cancel,
+      .submit {
+        background: $newdark;
+        height: 100%;
+        color: $white;
+      }
     }
   }
 }
@@ -69,18 +116,27 @@
 
 <script>
 export default {
+  data() {
+    return {
+      file: require("~/assets/images/base/file.svg"),
+      folder: require("~/assets/images/base/folder.svg"),
+    };
+  },
   computed: {
     editor() {
       return this.$store.state.editor.folderToModify;
     },
-    message(){
-        return this.$store.state.editor.typeEditor
-    }
+    message() {
+      return this.$store.state.editor.typeEditor;
+    },
+    type() {
+      return this.$store.state.editor.type;
+    },
   },
   methods: {
-      closeExplorer(){
-          this.$store.dispatch("editor/closeEditor")
-      }
-  }
+    closeExplorer() {
+      this.$store.dispatch("editor/closeEditor");
+    },
+  },
 };
 </script>
