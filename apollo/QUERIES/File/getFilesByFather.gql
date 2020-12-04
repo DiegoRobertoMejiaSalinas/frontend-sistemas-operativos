@@ -1,0 +1,26 @@
+query File($input: String!) {
+  files: fileBySameFather(id: $input) {
+    id
+    name
+    slug
+    content
+    readableRoot
+    writableRoot
+    readableUser
+    writableUser
+    readableGuest
+    writableGuest
+    user {
+      name
+      role {
+        id
+        name
+      }
+    }
+    belongsTo {
+      id
+      name
+      slug
+    }
+  }
+}

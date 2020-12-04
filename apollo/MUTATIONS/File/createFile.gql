@@ -1,0 +1,10 @@
+mutation createFile($input: CreateFileInput){
+  createFile(file: $input){
+    file{
+      id
+      name
+      slug
+      content
+    }
+  }
+}

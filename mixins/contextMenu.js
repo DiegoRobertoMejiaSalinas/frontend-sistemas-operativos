@@ -1,7 +1,16 @@
+import DeleteDirectory from "~/apollo/MUTATIONS/Directory/deleteDirectory.gql";
+import DeleteFile from "~/apollo/MUTATIONS/File/deleteFile.gql";
+
 export default {
   computed: {
-    folder() {
+    item() {
       return this.$store.state.editor.folderToModify;
+    },
+    actualPosition() {
+      return this.$store.state.activePosition;
+    },
+    type() {
+      return this.$store.state.editor.type;
     }
   },
   methods: {
@@ -52,19 +61,39 @@ export default {
       this.$store.dispatch("editor/createFile");
     },
     paste() {
-      console.log("pegar");
+      if(this.$store.state.editor.clipboard){
+        
+      }
     },
     edit() {
-      this.$store.dispatch("editor/editFolder", this.folder);
+      if(this.type=="folder"){
+        this.$store.dispatch("editor/editFolder", this.item);
+      }else{
+        this.$store.dispatch("editor/editFile", this.item);
+      }
     },
     copy() {
-      this.$store.dispatch("copyClipboard", this.folder);
+      this.$store.dispatch("copyClipboard", this.item);
     },
     cut() {
-      this.$store.dispatch("cutClipboard", this.folder);
+      this.$store.dispatch("cutClipboard", this.item);
     },
     delete() {
-      console.log("pegar");
+      if (this.item.content) {
+      } else {
+        this.$apollo
+          .mutate({
+            mutation: this.type=="folder" ? DeleteDirectory : DeleteFile,
+            variables: {
+              input: {
+                id: this.item.id
+              }
+            }
+          })
+          .then(res => {
+            this.$parent.$emit("event", this.actualPosition);
+          });
+      }
     },
     chmod() {
       console.log("hoplaa");

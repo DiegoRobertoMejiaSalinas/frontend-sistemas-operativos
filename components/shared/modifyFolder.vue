@@ -7,7 +7,7 @@
         <img
           class="close"
           src="~@/assets/images/explorer/close.svg"
-          @click="closeExplorer"
+          @click="closeModifierEditor"
           alt=""
         />
       </div>
@@ -16,9 +16,9 @@
       <div class="inner-content">
         <img class="image" :src="type == 'folder' ? folder : file" alt="" />
         <p class="info">Ingrese el nuevo nombre</p>
-        <input class="input" type="text" />
-        <button class="cancel" @click="closeExplorer">Cancelar</button>
-        <button class="submit">Crear</button>
+        <input class="input" @keyup.enter="submit" type="text" v-model="name" />
+        <button class="cancel" @click="closeModifierEditor">Cancelar</button>
+        <button class="submit" @click="submit">Crear</button>
       </div>
     </div>
   </div>
@@ -115,11 +115,18 @@
 </style>
 
 <script>
+// Directory
+import CreateDirectory from "~/apollo/MUTATIONS/Directory/createDirectory.gql";
+
+// File
+import CreateFile from "~/apollo/MUTATIONS/File/createFile.gql";
+
 export default {
   data() {
     return {
       file: require("~/assets/images/base/file.svg"),
       folder: require("~/assets/images/base/folder.svg"),
+      name: "",
     };
   },
   computed: {
@@ -132,10 +139,37 @@ export default {
     type() {
       return this.$store.state.editor.type;
     },
+    folderPosition() {
+      return this.$store.state.activePosition;
+    },
+    user() {
+      return this.$store.state.localStorage.userId;
+    },
   },
   methods: {
-    closeExplorer() {
+    closeModifierEditor() {
+      this.$store.dispatch("editor/setType", "");
       this.$store.dispatch("editor/closeEditor");
+    },
+    submit() {
+      if (this.name) {
+        this.$apollo
+          .mutate({
+            mutation: this.type == "folder" ? CreateDirectory : CreateFile,
+            variables: {
+              input: {
+                name: this.name,
+                user: this.user,
+                belongsTo: this.folderPosition,
+              },
+            },
+          })
+          .then((res) => {
+            this.$store.dispatch("editor/setType", "");
+            this.$emit("refresh", this.folderPosition);
+            this.$store.dispatch("editor/closeEditor");
+          });
+      }
     },
   },
 };

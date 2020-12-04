@@ -1,0 +1,5 @@
+mutation deleteDirectory($input: DeleteInput){
+  deleteDirectory(directory: $input){
+    success
+  }
+}

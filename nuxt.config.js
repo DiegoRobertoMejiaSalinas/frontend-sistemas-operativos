@@ -27,7 +27,8 @@ export default {
     // https://go.nuxtjs.dev/pwa
     "@nuxtjs/pwa",
     "@nuxtjs/style-resources",
-    "@nuxtjs/apollo"
+    "@nuxtjs/apollo",
+    'nuxt-vuex-localstorage'
   ],
 
   apollo: {

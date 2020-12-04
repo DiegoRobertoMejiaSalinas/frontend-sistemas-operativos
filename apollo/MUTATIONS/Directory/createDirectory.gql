@@ -1,0 +1,9 @@
+mutation createDirectory($input: CreateDirectoryInput){
+  createDirectory(directory: $input){
+    directory{
+      id
+      name
+      slug
+    }
+  }
+}

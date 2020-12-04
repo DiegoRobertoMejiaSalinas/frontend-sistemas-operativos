@@ -6,7 +6,7 @@
     class="directory-wrapper mx-10 mt-3"
     :class="isSameIdClipboard && isCutClipboard ? 'active' : ''"
   >
-    <img src="~@/assets/images/base/folder.svg" alt="" />
+    <img src="~@/assets/images/base/file.svg" alt="" />
     <p>{{ data.name }}</p>
 
     <vue-context
@@ -80,11 +80,11 @@ export default {
   },
   methods: {
     openExplorer(data) {
-      this.$store.dispatch("setActivePosition", data.id);
-      this.$store.dispatch("openExplorer", data);
+      // this.$store.dispatch("setActivePosition", data.id);
+      // this.$store.dispatch("openExplorer", data);
     },
     handleClick(event, item) {
-      this.$store.dispatch("editor/setType", "folder");
+      this.$store.dispatch("editor/setType", "file");
       this.$store.dispatch("editor/setFolder", item);
       this.$refs.vueSimpleContextMenuDirectory.showMenu(event, item);
     },

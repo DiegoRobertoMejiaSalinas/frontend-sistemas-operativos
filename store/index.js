@@ -2,6 +2,7 @@ export const state = () => ({
   number: 2,
   openExplorer: false,
   activeFolder: null,
+  activePosition: "1",
 
   typeClipboard: "",
   clipboard: null,
@@ -34,6 +35,9 @@ export const mutations = {
   CLEAN_CLIPBOARD(state) {
     state.clipboard = null;
     state.idClipboard = null;
+  },
+  SET_ACTIVE_POSITION(state, id) {
+    state.activePosition = id;
   }
 };
 
@@ -42,6 +46,7 @@ export const actions = {
     context.commit("CHANGE_NUMBER", value);
   },
   closeExplorer(context) {
+    context.commit("SET_ACTIVE_POSITION", 1);
     context.commit("CLEAN_FOLDER");
     context.commit("CLOSE_EXPLORER");
   },
@@ -65,5 +70,8 @@ export const actions = {
   copyClipboard(context, folder) {
     context.commit("SET_TYPE_CLIPBOARD", "copy");
     context.commit("SET_CLIPBOARD", folder);
+  },
+  setActivePosition(context, id){
+    context.commit("SET_ACTIVE_POSITION", id);
   }
 };

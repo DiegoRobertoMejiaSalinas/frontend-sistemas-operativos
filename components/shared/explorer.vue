@@ -3,7 +3,8 @@
     <div class="outer-wrapper">
       <div class="action-bar">
         <div class="return-actions">
-          <img v-if="folder.id != 1"
+          <img
+            v-if="folder.id != 1"
             @click="goBack"
             src="~@/assets/images/explorer/back.svg"
             alt=""
@@ -23,12 +24,13 @@
         @contextmenu.prevent.stop="handleClick($event)"
         class="content-explorer"
       >
-        <div class="folder-wrapper" v-if="subfolders.length > 0">
+        <div class="folder-wrapper">
           <Directory
             v-for="folder of subfolders"
             :key="folder.id"
             :data="folder"
           />
+          <File v-for="file of subfiles" :key="file.id" :data="file" />
         </div>
       </div>
     </div>
@@ -104,41 +106,59 @@
 <script>
 // graphql queries
 import getDirectoryByFather from "~/apollo/QUERIES/Directory/getDirectoriesByFather.gql";
-import getDirectoryById from "~/apollo/QUERIES/Directory/getDetailedDirectory.gql"
+import getFileByFather from "~/apollo/QUERIES/File/getFilesByFather.gql";
+import getDirectoryById from "~/apollo/QUERIES/Directory/getDetailedDirectory.gql";
 
 // Mixins
 import ContextMenu from "~/mixins/contextMenu.js";
 
 // Components Base
 import Directory from "~/components/shared/directory.vue";
+import File from "~/components/shared/file.vue";
 export default {
   mixins: [ContextMenu],
+  components: { File, Directory },
   data() {
     return {
       subfolders: [],
-      options: [
-        {
-         
-          name: "Crear Carpeta",
-          slug: "mkdir",
-        },
-        {
-          name: "Crear Archivo",
-          slug: "vim",
-        },
-        {
-          type: "divider",
-        },
-        {
-          name: "Pegar",
-          slug: "paste",
-        },
-      ],
+      subfiles: [],
     };
   },
   computed: {
     folder() {
       return this.$store.state.activeFolder;
+    },
+    options() {
+      if (this.$store.state.clipboard) {
+        return [
+          {
+            name: "Crear Carpeta",
+            slug: "mkdir",
+          },
+          {
+            name: "Crear Archivo",
+            slug: "vim",
+          },
+          {
+            type: "divider",
+          },
+          {
+            name: "Pegar",
+            slug: "paste",
+          },
+        ];
+      } else {
+        return [
+          {
+            name: "Crear Carpeta",
+            slug: "mkdir",
+          },
+          {
+            name: "Crear Archivo",
+            slug: "vim",
+          },
+        ];
+      }
     },
   },
   mounted() {
@@ -176,11 +196,13 @@ export default {
           },
         })
         .then((res) => {
-          this.$store.dispatch("setFolder", res.data.directory)
+          this.$store.dispatch("setFolder", res.data.directory);
+          this.$store.dispatch("setActivePosition", res.data.directory.id);
         });
     },
     getFolders(id) {
       this.subfolders = [];
+      this.subfiles = [];
       this.$apollo
         .query({
           query: getDirectoryByFather,
@@ -192,6 +214,19 @@ export default {
         .then((res) => {
           for (let directory of res.data.directories) {
             this.subfolders.push(directory);
+          }
+        });
+      this.$apollo
+        .query({
+          query: getFileByFather,
+          fetchPolicy: "network-only",
+          variables: {
+            input: id ? id : this.folder.id,
+          },
+        })
+        .then((res) => {
+          for (let file of res.data.files) {
+            this.subfiles.push(file);
           }
         });
     },

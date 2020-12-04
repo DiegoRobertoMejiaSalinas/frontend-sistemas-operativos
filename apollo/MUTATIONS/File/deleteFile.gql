@@ -1,0 +1,5 @@
+mutation deleteFile($input: DeleteInput){
+  deleteFile(file: $input){
+    success
+  }
+}

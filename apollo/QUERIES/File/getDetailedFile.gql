@@ -1,0 +1,27 @@
+query File($input: String!) {
+  file: fileById(id: $input) {
+    id
+    name
+    slug
+    content
+    readableRoot
+    writableRoot
+    readableUser
+    writableUser
+    readableGuest
+    writableGuest
+    user {
+      id
+      name
+      role {
+        id
+        name
+      }
+    }
+    belongsTo {
+      id
+      name
+      slug
+    }
+  }
+}
