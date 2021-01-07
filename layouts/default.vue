@@ -7,7 +7,7 @@
           <button class="inicio" @click="activeStartbar = !activeStartbar">Inicio</button>
           <div class="list-command" :class="!!activeStartbar ? 'active' : ''">
             <ul>
-              <li>Block de Notas</li>
+              <li @click="openNotepad">Block de Notas</li>
               <li>Paint</li>
               <li @click="openCalculator">Calculadora</li>
               <li>Cerrar Sesión</li>
@@ -43,6 +43,10 @@ export default {
     }, 1000);
   },
   methods: {
+    openNotepad(){
+       this.activeStartbar= false
+      this.$store.commit("apps/SET_NOTEPAD", true)
+    },
     openCalculator(){
       this.activeStartbar= false
       this.$store.commit("apps/SET_CALCULATOR", true)

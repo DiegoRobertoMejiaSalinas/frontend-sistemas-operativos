@@ -14,7 +14,11 @@ export default {
   css: ["vuesax/dist/vuesax.css", "~/scss/index.scss"],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ["@/plugins/vuesax", "@/plugins/vuecontext.js"],
+  plugins: [
+    "@/plugins/vuesax",
+    "@/plugins/vuecontext.js",
+    { src: "~/plugins/editor.js", mode: "client" }
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -28,7 +32,7 @@ export default {
     "@nuxtjs/pwa",
     "@nuxtjs/style-resources",
     "@nuxtjs/apollo",
-    'nuxt-vuex-localstorage'
+    "nuxt-vuex-localstorage"
   ],
 
   apollo: {

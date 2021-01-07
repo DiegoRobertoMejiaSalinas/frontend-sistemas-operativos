@@ -126,7 +126,7 @@ export default {
     return {
       file: require("~/assets/images/base/file.svg"),
       folder: require("~/assets/images/base/folder.svg"),
-      name: "",
+      name: ""
     };
   },
   computed: {
@@ -144,7 +144,7 @@ export default {
     },
     user() {
       return this.$store.state.localStorage.userId;
-    },
+    }
   },
   methods: {
     closeModifierEditor() {
@@ -153,24 +153,27 @@ export default {
     },
     submit() {
       if (this.name) {
+        let input = {
+          name: this.name,
+          user: this.user,
+          belongsTo: this.folderPosition
+        };
+
+        if(this.type !== "folder"){
+          input= {...input, content: ""}
+        }
         this.$apollo
           .mutate({
             mutation: this.type == "folder" ? CreateDirectory : CreateFile,
-            variables: {
-              input: {
-                name: this.name,
-                user: this.user,
-                belongsTo: this.folderPosition,
-              },
-            },
+            variables: { input }
           })
-          .then((res) => {
+          .then(res => {
             this.$store.dispatch("editor/setType", "");
             this.$emit("refresh", this.folderPosition);
             this.$store.dispatch("editor/closeEditor");
           });
       }
-    },
-  },
+    }
+  }
 };
 </script>

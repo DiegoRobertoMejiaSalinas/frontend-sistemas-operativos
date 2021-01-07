@@ -10,6 +10,7 @@
       <ModifyFolder @refresh="refresh" v-if="!!editorOpen" />
 
       <Calculator />
+      <Notepad @refresh="refresh" />
     </div>
 
     <vue-context
@@ -39,9 +40,10 @@ import ModifyFolder from "~/components/shared/modifyFolder.vue";
 // Applications
 import Calculator from "~/components/apps/calculator.vue";
 import Paint from "~/components/apps/paint.vue";
+import Notepad from "~/components/apps/notepad.vue";
 
 export default {
-  components: { Directory, Explorer, ModifyFolder, File, Calculator, Paint },
+  components: { Directory, Explorer, ModifyFolder, File, Calculator, Notepad },
   mixins: [ContextMenu],
   data() {
     return {
