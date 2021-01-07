@@ -8,7 +8,7 @@
       <File v-for="file of files" :key="file.id" :data="file" />
       <Explorer ref="explorer" v-if="!!explorerOpen" />
       <ModifyFolder @refresh="refresh" v-if="!!editorOpen" />
-      <!-- <Calculator /> -->
+      <Calculator />
     </div>
 
     <vue-context
