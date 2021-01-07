@@ -1,5 +1,6 @@
 <template>
-  <div class="calculator">
+  <div class="calculator" v-show="!!calculator">
+    <div class="close" @click="calculator = false">X</div>
     <!-- resultado -->
     <div class="result">
       <div class="history">
@@ -38,6 +39,16 @@
 
 <script>
 export default {
+  computed: {
+    calculator: {
+      get() {
+        return this.$store.state.apps.calculator;
+      },
+      set(val) {
+        this.$store.commit("apps/SET_CALCULATOR", val);
+      }
+    }
+  },
   methods: {
     getHistory() {
       return document.querySelector(".history-value").innerText;
@@ -123,11 +134,28 @@ export default {
   top: 30%;
   transform: translate(-50%, -30%);
   width: 320px;
-  height: 520px;
+  height: 550px;
   background-color: #eaedef;
   position: relative;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.close {
+  width: 30px;
+  height: 30px;
+  float: right;
+  background: rgb(206, 115, 115);
+  border-radius: 50%;
+  border-width: 0;
+  margin: 10px;
+  font-size: 15px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins";
+  cursor: pointer;
 }
 
 .result {

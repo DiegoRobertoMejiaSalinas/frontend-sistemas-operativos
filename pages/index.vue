@@ -8,6 +8,7 @@
       <File v-for="file of files" :key="file.id" :data="file" />
       <Explorer ref="explorer" v-if="!!explorerOpen" />
       <ModifyFolder @refresh="refresh" v-if="!!editorOpen" />
+
       <Calculator />
     </div>
 
@@ -36,15 +37,16 @@ import Explorer from "~/components/shared/explorer.vue";
 import ModifyFolder from "~/components/shared/modifyFolder.vue";
 
 // Applications
-import Calculator from "~/components/apps/calculator.vue"
-import Paint from "~/components/apps/paint.vue"
+import Calculator from "~/components/apps/calculator.vue";
+import Paint from "~/components/apps/paint.vue";
+
 export default {
   components: { Directory, Explorer, ModifyFolder, File, Calculator, Paint },
   mixins: [ContextMenu],
   data() {
     return {
       folders: [],
-      files: [],
+      files: []
     };
   },
   computed: {
@@ -62,36 +64,36 @@ export default {
         return [
           {
             name: "Crear Carpeta",
-            slug: "mkdir",
+            slug: "mkdir"
           },
           {
             name: "Crear Archivo",
-            slug: "vim",
+            slug: "vim"
           },
           {
-            type: "divider",
+            type: "divider"
           },
           {
             name: "Pegar",
-            slug: "paste",
-          },
+            slug: "paste"
+          }
         ];
       } else {
         return [
           {
             name: "Crear Carpeta",
-            slug: "mkdir",
+            slug: "mkdir"
           },
           {
             name: "Crear Archivo",
-            slug: "vim",
+            slug: "vim"
           }
         ];
       }
-    },
+    }
   },
   created() {
-    this.$on("event", (value) => {
+    this.$on("event", value => {
       this.refresh(value);
     });
   },
@@ -121,10 +123,10 @@ export default {
           query: getDirectoryByFather,
           fetchPolicy: "network-only",
           variables: {
-            input: "1",
-          },
+            input: "1"
+          }
         })
-        .then((res) => {
+        .then(res => {
           for (let directory of res.data.directories) {
             this.folders.push(directory);
           }
@@ -134,16 +136,16 @@ export default {
           query: getFileByFather,
           fetchPolicy: "network-only",
           variables: {
-            input: "1",
-          },
+            input: "1"
+          }
         })
-        .then((res) => {
+        .then(res => {
           for (let file of res.data.files) {
             this.files.push(file);
           }
         });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -169,4 +171,3 @@ export default {
   }
 }
 </style>
-
