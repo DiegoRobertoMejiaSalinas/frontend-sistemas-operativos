@@ -1,5 +1,5 @@
-mutation createFile($input: CreateFileInput){
-  createFile(file: $input){
+mutation updateFile($input: UpdateFileInput){
+  updateFile(file: $input){
     file{
       id
       name

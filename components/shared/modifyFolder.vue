@@ -117,9 +117,11 @@
 <script>
 // Directory
 import CreateDirectory from "~/apollo/MUTATIONS/Directory/createDirectory.gql";
+import UpdateDirectory from "~/apollo/MUTATIONS/Directory/updateDirectory.gql";
 
 // File
 import CreateFile from "~/apollo/MUTATIONS/File/createFile.gql";
+import UpdateFile from "~/apollo/MUTATIONS/File/updateFile.gql";
 
 export default {
   data() {
@@ -144,6 +146,12 @@ export default {
     },
     user() {
       return this.$store.state.localStorage.userId;
+    },
+    isEditing() {
+      return this.$store.state.editor.isEditing;
+    },
+    selectedId() {
+      return this.$store.state.editor.selectedId;
     }
   },
   methods: {
@@ -156,15 +164,32 @@ export default {
         let input = {
           name: this.name,
           user: this.user,
-          belongsTo: this.folderPosition
+          belongsTo: this.folderPosition,
+          readableRoot: true,
+          writableRoot: true,
+          readableUser: true,
+          writableUser: true,
+          readableGuest: true,
+          writableGuest: false
         };
 
-        if(this.type !== "folder"){
-          input= {...input, content: ""}
+        if (this.type !== "folder") {
+          input = { ...input, content: "" };
         }
+
+        if (!!this.isEditing) {
+          input = { ...input, id: this.selectedId };
+        }
+
         this.$apollo
           .mutate({
-            mutation: this.type == "folder" ? CreateDirectory : CreateFile,
+            mutation: !!this.isEditing
+              ? this.type == "folder"
+                ? UpdateDirectory
+                : UpdateFile
+              : this.type == "folder"
+              ? CreateDirectory
+              : CreateFile,
             variables: { input }
           })
           .then(res => {

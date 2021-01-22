@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="data"
-    @dblclick="openExplorer(data)"
+    @dblclick="openNotepad(data)"
     @contextmenu.prevent.stop="handleClick($event, data)"
     class="directory-wrapper mx-10 mt-3"
     :class="isSameIdClipboard && isCutClipboard ? 'active' : ''"
@@ -27,8 +27,8 @@ export default {
   props: {
     data: {
       required: true,
-      type: Object,
-    },
+      type: Object
+    }
   },
   mixins: [ContextMenu],
   data() {
@@ -36,38 +36,38 @@ export default {
       options: [
         {
           name: "Editar",
-          slug: "edit",
+          slug: "edit"
         },
         {
-          type: "divider",
+          type: "divider"
         },
         {
           name: "Cortar",
-          slug: "cut",
+          slug: "cut"
         },
         {
           name: "Copiar",
-          slug: "copy",
+          slug: "copy"
         },
         {
-          type: "divider",
+          type: "divider"
         },
         {
           name: "Eliminar",
-          slug: "delete",
+          slug: "delete"
         },
         {
-          type: "divider",
+          type: "divider"
         },
         {
           name: "Permisos",
-          slug: "chmod",
+          slug: "chmod"
         },
         {
           name: "Propietario",
-          slug: "chown",
-        },
-      ],
+          slug: "chown"
+        }
+      ]
     };
   },
   computed: {
@@ -76,12 +76,12 @@ export default {
     },
     isCutClipboard() {
       return this.$store.state.typeClipboard == "cut";
-    },
+    }
   },
   methods: {
-    openExplorer(data) {
-      // this.$store.dispatch("setActivePosition", data.id);
-      // this.$store.dispatch("openExplorer", data);
+    openNotepad(data) {
+      this.$store.commit("apps/SET_NOTEPAD", true);
+      this.$nuxt.$emit("set-notepad-data", data);
     },
     handleClick(event, item) {
       this.$store.dispatch("editor/setType", "file");
@@ -90,8 +90,8 @@ export default {
     },
     optionClicked(event) {
       this.switchOption(event.option.slug);
-    },
-  },
+    }
+  }
 };
 </script>
 

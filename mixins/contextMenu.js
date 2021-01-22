@@ -61,14 +61,13 @@ export default {
       this.$store.dispatch("editor/createFile");
     },
     paste() {
-      if(this.$store.state.editor.clipboard){
-        
+      if (this.$store.state.editor.clipboard) {
       }
     },
     edit() {
-      if(this.type=="folder"){
+      if (this.type == "folder") {
         this.$store.dispatch("editor/editFolder", this.item);
-      }else{
+      } else {
         this.$store.dispatch("editor/editFile", this.item);
       }
     },
@@ -79,21 +78,21 @@ export default {
       this.$store.dispatch("cutClipboard", this.item);
     },
     delete() {
-      if (this.item.content) {
-      } else {
-        this.$apollo
-          .mutate({
-            mutation: this.type=="folder" ? DeleteDirectory : DeleteFile,
-            variables: {
-              input: {
-                id: this.item.id
-              }
+      console.log(this.item);
+      console.log(this.type);
+
+      this.$apollo
+        .mutate({
+          mutation: this.type == "folder" ? DeleteDirectory : DeleteFile,
+          variables: {
+            input: {
+              id: this.item.id
             }
-          })
-          .then(res => {
-            this.$parent.$emit("event", this.actualPosition);
-          });
-      }
+          }
+        })
+        .then(res => {
+          this.$parent.$emit("event", this.actualPosition);
+        });
     },
     chmod() {
       console.log("hoplaa");

@@ -1,10 +1,9 @@
-mutation createFile($input: CreateFileInput){
-  createFile(file: $input){
-    file{
+mutation updateDirectory($input: UpdateDirectoryInput){
+  updateDirectory(directory: $input){
+    directory{
       id
       name
       slug
-      content
       readableRoot
       writableRoot
       readableUser

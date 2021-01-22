@@ -107,11 +107,14 @@
 <script>
 // File
 import CreateFile from "~/apollo/MUTATIONS/File/createFile.gql";
+import UpdateFile from "~/apollo/MUTATIONS/File/updateFile.gql";
 export default {
   data() {
     return {
+      isEditing: false,
       text: "",
       title: "Nuevo Documento",
+      id: null,
       // CONFIG FROALA
       config: {
         language: "es",
@@ -134,6 +137,11 @@ export default {
       }
     };
   },
+  created() {
+    this.$nuxt.$on("set-notepad-data", data => {
+      this.setInfo(data);
+    });
+  },
   computed: {
     folderPosition() {
       return this.$store.state.activePosition;
@@ -146,29 +154,51 @@ export default {
         return this.$store.state.apps.notepad;
       },
       set(val) {
+        this.isEditing = false;
+        this.id = null;
+        this.text = "";
+        this.title = "Nuevo Documento";
         this.$store.commit("apps/SET_NOTEPAD", val);
       }
     }
   },
   methods: {
+    setInfo(data) {
+      this.isEditing = true;
+      this.title = data.name;
+      this.text = data.content;
+      this.id = data.id;
+    },
     saveText() {
       let input = {
         name: this.title,
         user: this.user,
         belongsTo: this.folderPosition,
-        content: this.text
+        content: this.text,
+        readableRoot: true,
+        writableRoot: true,
+        readableUser: true,
+        writableUser: true,
+        readableGuest: true,
+        writableGuest: false
       };
+
+      if (!!this.isEditing) {
+        input = { ...input, id: this.id };
+      }
 
       this.$apollo
         .mutate({
-          mutation: CreateFile,
+          mutation: !!this.isEditing ? UpdateFile : CreateFile,
           variables: { input }
         })
         .then(res => {
+          this.isEditing = false;
           this.$emit("refresh", this.folderPosition);
-          this.notepad = "";
+          this.id = null;
           this.text = "";
           this.title = "Nuevo Documento";
+          this.notepad = false;
         });
     }
   }

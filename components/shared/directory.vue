@@ -102,8 +102,6 @@ export default {
   cursor: pointer;
 
   &.active {
-    // background: rgba(108, 92, 231, .6);
-
     img,
     p {
       opacity: 0.6;

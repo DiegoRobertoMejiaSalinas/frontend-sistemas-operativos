@@ -4,8 +4,8 @@
       <img src="~@/assets/images/desktop/background.jpg" alt="" />
     </div>
     <div class="inner-wrapper">
-      <Directory v-for="folder of folders" :key="folder.id" :data="folder" />
-      <File v-for="file of files" :key="file.id" :data="file" />
+      <Directory v-for="folder of folders" :key="folder.id + 'folder'" :data="folder" />
+      <File v-for="file of files" :key="file.id + 'file'" :data="file" />
       <Explorer ref="explorer" v-if="!!explorerOpen" />
       <ModifyFolder @refresh="refresh" v-if="!!editorOpen" />
 

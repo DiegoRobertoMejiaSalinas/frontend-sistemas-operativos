@@ -1,9 +1,15 @@
-mutation createDirectory($input: CreateDirectoryInput){
-  createDirectory(directory: $input){
-    directory{
+mutation createDirectory($input: CreateDirectoryInput) {
+  createDirectory(directory: $input) {
+    directory {
       id
       name
       slug
+      readableRoot
+      writableRoot
+      readableUser
+      writableUser
+      readableGuest
+      writableGuest
     }
   }
 }
