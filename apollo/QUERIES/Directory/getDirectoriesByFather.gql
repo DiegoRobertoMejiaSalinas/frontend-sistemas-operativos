@@ -10,6 +10,7 @@ query Directory($input: String!) {
     readableGuest
     writableGuest
     user {
+      id
       name
       role {
         id

@@ -146,8 +146,17 @@ export default {
     folderPosition() {
       return this.$store.state.activePosition;
     },
-    user() {
+    userId() {
       return this.$store.state.localStorage.userId;
+    },
+    user() {
+      return this.$store.state.localStorage.user;
+    },
+    userPermissions(){
+      return this.$store.state.permissions.user
+    },
+    rules() {
+      return this.$store.state.permissions.rules;
     },
     notepad: {
       get() {
@@ -169,10 +178,16 @@ export default {
       this.text = data.content;
       this.id = data.id;
     },
+    notEnoughAccess() {
+      this.$toast.error(
+        "No cuentas con los permisos suficientes para entrar a este archivo",
+        { duration: 2000 }
+      );
+    },
     saveText() {
       let input = {
         name: this.title,
-        user: this.user,
+        user: this.userId,
         belongsTo: this.folderPosition,
         content: this.text,
         readableRoot: true,
@@ -184,7 +199,34 @@ export default {
       };
 
       if (!!this.isEditing) {
-        input = { ...input, id: this.id };
+        input = {
+          ...input,
+          id: this.id,
+          readableRoot: this.rules.readableRoot,
+          writableRoot: this.rules.writableRoot,
+          readableUser: this.rules.readableUser,
+          writableUser: this.rules.writableUser,
+          readableGuest: this.rules.readableGuest,
+          writableGuest: this.rules.writableGuest,
+          user: this.userPermissions.id
+        };
+      }
+
+      if (this.user.role.name == "admin" && !this.rules.writableRoot) {
+        this.notEnoughAccess();
+        return;
+      }
+      if (
+        this.user.role.name == "user" &&
+        !this.rules.writableRoot &&
+        this.userPermissions.id !== this.$store.state.localStorage.user.id
+      ) {
+        this.notEnoughAccess();
+        return;
+      }
+      if (this.user.role.name == "guest" && !this.rules.writableRoot) {
+        this.notEnoughAccess();
+        return;
       }
 
       this.$apollo

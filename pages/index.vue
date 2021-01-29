@@ -13,7 +13,7 @@
       <Notepad @refresh="refresh" />
 
       <Property v-if="!!propertyOpen" />
-      <Permissions v-if="!!permissionsOpen" />
+      <Permissions v-if="!!permissionsOpen" @refresh="refresh" />
     </div>
 
     <vue-context

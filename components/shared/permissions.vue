@@ -36,13 +36,16 @@
       </ul>
 
       <div class="text-center actions">
-          <vs-button>Guardar</vs-button>
+        <vs-button @click="savePermissions">Guardar</vs-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import UpdateDirectory from "~/apollo/MUTATIONS/Directory/updateDirectory.gql";
+import UpdateFile from "~/apollo/MUTATIONS/File/updateFile.gql";
+
 export default {
   data() {
     return {
@@ -58,11 +61,27 @@ export default {
     }
   },
   computed: {
-    isSameUser() {
-      return this.$store.state.localStorage.user.name == this.owner;
-    },
+  
     owner() {
       return this.$store.state.permissions.owner;
+    },
+    nameActual() {
+      return this.$store.state.permissions.folderName;
+    },
+    id() {
+      return this.$store.state.permissions.id;
+    },
+    folderPosition() {
+      return this.$store.state.activePosition;
+    },
+    user() {
+      return this.$store.state.localStorage.user;
+    },
+     userPermissions(){
+      return this.$store.state.permissions.user
+    },
+    userId() {
+      return this.$store.state.localStorage.userId;
     },
     rules: {
       get() {
@@ -70,7 +89,6 @@ export default {
         return this.$store.state.permissions.rules;
       },
       set(val) {
-        console.log(val);
         this.$store.commit("permissions/SET_RULES", val);
       }
     }
@@ -78,6 +96,56 @@ export default {
   methods: {
     close() {
       this.$store.commit("permissions/SET_PERMISSIONS", false);
+    },
+    savePermissions() {
+      if (this.user.name == "root") {
+        this.saveApollo();
+      } else {
+        if (this.user.name == this.owner) {
+          this.saveApollo();
+        } else {
+          this.$toast.info(
+            `Solo el ADMINISTRADOR o el usuario ${this.owner.toUpperCase()} pueden cambiar los permisos de este archivo`,
+            { duration: 3000 }
+          );
+        }
+      }
+    },
+    saveApollo() {
+
+      let input = {
+        name: this.nameActual,
+        user: this.userPermissions.id,
+        id: this.id,
+        belongsTo: this.folderPosition,
+        readableRoot: this.form.readableRoot,
+        writableRoot: this.form.writableRoot,
+        readableUser: this.form.readableUser,
+        writableUser: this.form.writableUser,
+        readableGuest: this.form.readableGuest,
+        writableGuest: this.form.writableGuest
+      };
+
+      if(this.$store.state.editor.type == "file"){
+        input = {...input, content: this.$store.state.permissions.content}
+      }
+
+      this.$apollo
+        .mutate({
+          mutation:
+            this.$store.state.editor.type == "file"
+              ? UpdateFile
+              : UpdateDirectory,
+          variables: { input }
+        })
+        .then(res => {
+          this.$emit("refresh", this.folderPosition);
+          this.$store.commit("permissions/SET_PERMISSIONS", false);
+            this.$toast.success(
+            `Se ha modificado los permisos del archivo ${this.nameActual}`,
+            { duration: 3000 }
+          );
+        });
     }
   }
 };
@@ -117,9 +185,9 @@ export default {
         margin-left: 10px;
       }
     }
-    .actions{
-       display: flex;
-       justify-content: center;
+    .actions {
+      display: flex;
+      justify-content: center;
     }
   }
 }

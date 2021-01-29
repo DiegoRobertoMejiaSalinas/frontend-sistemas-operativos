@@ -83,11 +83,15 @@ export default {
   },
   methods: {
     openExplorer(data) {
-      if (this.user.role.name == "root" && !this.data.readableRoot) {
+      if (this.user.role.name == "admin" && !this.data.readableRoot) {
         this.notEnoughAccess();
         return;
       }
-      if (this.user.role.name == "user" && !this.data.readableUser) {
+      if (
+        this.user.role.name == "user" &&
+        !this.data.readableUser &&
+        this.data.user.name !== this.$store.state.localStorage.user.name
+      ) {
         this.notEnoughAccess();
         return;
       }
@@ -96,7 +100,28 @@ export default {
         return;
       }
 
+      const {
+        readableGuest,
+        writableGuest,
+        readableRoot,
+        writableRoot,
+        writableUser,
+        readableUser
+      } = this.data;
+
+      let rules = {
+        readableGuest,
+        writableGuest,
+        readableRoot,
+        writableRoot,
+        writableUser,
+        readableUser
+      };
+
       this.$store.dispatch("setActivePosition", data.id);
+      this.$store.commit("permissions/SET_USER_DATA", this.data.user);
+      this.$store.commit("permissions/SET_RULES", rules);
+
       this.$store.dispatch("openExplorer", data);
     },
     notEnoughAccess() {

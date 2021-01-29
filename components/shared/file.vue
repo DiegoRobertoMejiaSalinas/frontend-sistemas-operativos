@@ -83,11 +83,11 @@ export default {
   },
   methods: {
     openNotepad(data) {
-      if (this.user.role.name == "root" && !this.data.readableRoot) {
+      if (this.user.role.name == "admin" && !this.data.readableRoot) {
         this.notEnoughAccess();
         return;
       }
-      if (this.user.role.name == "user" && !this.data.readableUser) {
+      if (this.user.role.name == "user" && !this.data.readableUser && this.data.user.name !== this.$store.state.localStorage.user.name) {
         this.notEnoughAccess();
         return;
       }
@@ -116,6 +116,7 @@ export default {
       };
       
       this.$store.commit("permissions/SET_RULES", rules);
+      this.$store.commit("permissions/SET_USER_DATA", this.data.user);
       this.$store.commit("apps/SET_NOTEPAD", true);
       this.$nuxt.$emit("set-notepad-data", data);
 

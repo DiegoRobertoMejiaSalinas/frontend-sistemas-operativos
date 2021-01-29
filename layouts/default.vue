@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="second-section">
-          <p class="hour">{{ time }}</p>
+          <p class="hour">Usuario: {{$store.state.localStorage && $store.state.localStorage.user ? $store.state.localStorage.user.name.toUpperCase() : ''}} | {{ time }}</p>
         </div>
       </div>
     </div>

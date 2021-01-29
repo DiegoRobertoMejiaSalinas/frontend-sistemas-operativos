@@ -81,9 +81,6 @@ export default {
       this.$store.dispatch("cutClipboard", this.item);
     },
     delete() {
-      console.log(this.item);
-      console.log(this.type);
-
       if (this.user.name == "root") {
         this.deleteApollo();
       } else {
@@ -137,7 +134,16 @@ export default {
         readableUser
       };
 
+      this.$store.commit("editor/SET_TYPE", this.type);
+      if (this.item.content) {
+        this.$store.commit("permissions/SET_CONTENT", this.item.content);
+      } else {
+        this.$store.commit("permissions/SET_CONTENT", "");
+      }
       this.$store.commit("permissions/SET_OWNER", this.item.user.name);
+      this.$store.commit("permissions/SET_USER_DATA", this.item.user);
+      this.$store.commit("permissions/SET_ID", this.item.id);
+      this.$store.commit("permissions/SET_FOLDER_NAME", this.item.name);
       this.$store.commit("permissions/SET_RULES", rules);
       this.$store.commit("permissions/SET_PERMISSIONS", true);
     },
@@ -162,7 +168,17 @@ export default {
         readableUser
       };
 
+      this.$store.commit("editor/SET_TYPE", this.type);
+      if (this.item.content) {
+        this.$store.commit("permissions/SET_CONTENT", this.item.content);
+      } else {
+        this.$store.commit("permissions/SET_CONTENT", "");
+      }
+
+      this.$store.commit("permissions/SET_USER_DATA", this.item.user);
       this.$store.commit("permissions/SET_OWNER", this.item.user.name);
+      this.$store.commit("permissions/SET_ID", this.item.id);
+      this.$store.commit("permissions/SET_FOLDER_NAME", this.item.name);
       this.$store.commit("permissions/SET_RULES", rules);
       this.$store.commit("permissions/SET_PROPERTY", true);
     }

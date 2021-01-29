@@ -11,6 +11,7 @@ query File($input: String!) {
     readableGuest
     writableGuest
     user {
+      id
       name
       role {
         id
