@@ -50,6 +50,7 @@ import Permissions from "~/components/shared/permissions.vue";
 import Calculator from "~/components/apps/calculator.vue";
 import Paint from "~/components/apps/paint.vue";
 import Notepad from "~/components/apps/notepad.vue";
+import Browser from "~/components/shared/browser.vue";
 
 export default {
   components: {
@@ -60,6 +61,7 @@ export default {
     Calculator,
     Notepad,
     Property,
+    Browser,
     Permissions
   },
   mixins: [ContextMenu],
@@ -124,8 +126,7 @@ export default {
     });
     this.$nuxt.$on("refreshing", () => {
       // this.refresh();
-        this.getRoot();
-
+      this.getRoot();
     });
   },
   mounted() {
