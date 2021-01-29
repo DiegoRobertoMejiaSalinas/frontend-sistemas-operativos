@@ -218,13 +218,13 @@ export default {
       }
       if (
         this.user.role.name == "user" &&
-        !this.rules.writableRoot &&
+        !this.rules.writableUser &&
         this.userPermissions.id !== this.$store.state.localStorage.user.id
       ) {
         this.notEnoughAccess();
         return;
       }
-      if (this.user.role.name == "guest" && !this.rules.writableRoot) {
+      if (this.user.role.name == "guest" && !this.rules.writableGuest) {
         this.notEnoughAccess();
         return;
       }

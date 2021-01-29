@@ -9,11 +9,17 @@ export default {
     actualPosition() {
       return this.$store.state.activePosition;
     },
+    activeFolder() {
+      return this.$store.state.activeFolder;
+    },
     type() {
       return this.$store.state.editor.type;
     },
     user() {
       return this.$store.state.localStorage.user;
+    },
+    userPermissions() {
+      return this.$store.state.permissions.user;
     }
   },
   methods: {
@@ -55,11 +61,69 @@ export default {
         return;
       }
     },
+    notEnoughAccess() {
+      this.$toast.error(
+        "No cuentas con los permisos suficientes para crear un archivo",
+        { duration: 2000 }
+      );
+    },
     mkdir() {
+      if (
+        this.activeFolder &&
+        this.user.role.name == "admin" &&
+        !this.activeFolder.writableRoot
+      ) {
+        this.notEnoughAccess();
+        return;
+      }
+      if (
+        this.activeFolder &&
+        this.user.role.name == "user" &&
+        !this.activeFolder.writableUser &&
+        this.userPermissions.id !== this.$store.state.localStorage.user.id
+      ) {
+        this.notEnoughAccess();
+        return;
+      }
+      if (
+        this.activeFolder &&
+        this.user.role.name == "guest" &&
+        !this.activeFolder.writableGuest
+      ) {
+        this.notEnoughAccess();
+        return;
+      }
+
       this.$store.dispatch("editor/closeEditor");
       this.$store.dispatch("editor/createFolder");
     },
     vim() {
+      if (
+        this.activeFolder &&
+        this.user.role.name == "admin" &&
+        !this.activeFolder.writableRoot
+      ) {
+        this.notEnoughAccess();
+        return;
+      }
+      if (
+        this.activeFolder &&
+        this.user.role.name == "user" &&
+        !this.activeFolder.writableUser &&
+        this.userPermissions.id !== this.$store.state.localStorage.user.id
+      ) {
+        this.notEnoughAccess();
+        return;
+      }
+      if (
+        this.activeFolder &&
+        this.user.role.name == "guest" &&
+        !this.activeFolder.writableGuest
+      ) {
+        this.notEnoughAccess();
+        return;
+      }
+
       this.$store.dispatch("editor/closeEditor");
       this.$store.dispatch("editor/createFile");
     },
