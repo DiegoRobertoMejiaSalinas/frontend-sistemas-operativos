@@ -121,7 +121,7 @@ export default {
   data() {
     return {
       subfolders: [],
-      subfiles: [],
+      subfiles: []
     };
   },
   computed: {
@@ -133,33 +133,40 @@ export default {
         return [
           {
             name: "Crear Carpeta",
-            slug: "mkdir",
+            slug: "mkdir"
           },
           {
             name: "Crear Archivo",
-            slug: "vim",
+            slug: "vim"
           },
           {
-            type: "divider",
+            type: "divider"
           },
           {
             name: "Pegar",
-            slug: "paste",
-          },
+            slug: "paste"
+          }
         ];
       } else {
         return [
           {
             name: "Crear Carpeta",
-            slug: "mkdir",
+            slug: "mkdir"
           },
           {
             name: "Crear Archivo",
-            slug: "vim",
-          },
+            slug: "vim"
+          }
         ];
       }
-    },
+    }
+  },
+  created() {
+    this.$nuxt.$on("refreshing", () => {
+      if (!!this.$store.state.openExplorer) {
+        this.getFolders();
+      }
+    });
   },
   mounted() {
     if (this.folder) {
@@ -169,7 +176,7 @@ export default {
   watch: {
     folder(val) {
       this.getFolders();
-    },
+    }
   },
   methods: {
     handleClick(event, item) {
@@ -192,10 +199,10 @@ export default {
           query: getDirectoryById,
           fetchPolicy: "network-only",
           variables: {
-            input: id,
-          },
+            input: id
+          }
         })
-        .then((res) => {
+        .then(res => {
           this.$store.dispatch("setFolder", res.data.directory);
           this.$store.dispatch("setActivePosition", res.data.directory.id);
         });
@@ -208,10 +215,10 @@ export default {
           query: getDirectoryByFather,
           fetchPolicy: "network-only",
           variables: {
-            input: id ? id : this.folder.id,
-          },
+            input: id ? id : this.folder.id
+          }
         })
-        .then((res) => {
+        .then(res => {
           for (let directory of res.data.directories) {
             this.subfolders.push(directory);
           }
@@ -221,15 +228,15 @@ export default {
           query: getFileByFather,
           fetchPolicy: "network-only",
           variables: {
-            input: id ? id : this.folder.id,
-          },
+            input: id ? id : this.folder.id
+          }
         })
-        .then((res) => {
+        .then(res => {
           for (let file of res.data.files) {
             this.subfiles.push(file);
           }
         });
-    },
-  },
+    }
+  }
 };
 </script>

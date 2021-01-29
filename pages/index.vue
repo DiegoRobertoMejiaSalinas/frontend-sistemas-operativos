@@ -4,7 +4,11 @@
       <img src="~@/assets/images/desktop/background.jpg" alt="" />
     </div>
     <div class="inner-wrapper">
-      <Directory v-for="folder of folders" :key="folder.id + 'folder'" :data="folder" />
+      <Directory
+        v-for="folder of folders"
+        :key="folder.id + 'folder'"
+        :data="folder"
+      />
       <File v-for="file of files" :key="file.id + 'file'" :data="file" />
       <Explorer ref="explorer" v-if="!!explorerOpen" />
       <ModifyFolder @refresh="refresh" v-if="!!editorOpen" />
@@ -39,8 +43,8 @@ import File from "~/components/shared/file.vue";
 import Directory from "~/components/shared/directory.vue";
 import Explorer from "~/components/shared/explorer.vue";
 import ModifyFolder from "~/components/shared/modifyFolder.vue";
-import Property from "~/components/shared/property.vue"
-import Permissions from "~/components/shared/permissions.vue"
+import Property from "~/components/shared/property.vue";
+import Permissions from "~/components/shared/permissions.vue";
 
 // Applications
 import Calculator from "~/components/apps/calculator.vue";
@@ -48,7 +52,16 @@ import Paint from "~/components/apps/paint.vue";
 import Notepad from "~/components/apps/notepad.vue";
 
 export default {
-  components: { Directory, Explorer, ModifyFolder, File, Calculator, Notepad, Property, Permissions },
+  components: {
+    Directory,
+    Explorer,
+    ModifyFolder,
+    File,
+    Calculator,
+    Notepad,
+    Property,
+    Permissions
+  },
   mixins: [ContextMenu],
   data() {
     return {
@@ -63,11 +76,11 @@ export default {
     editorOpen() {
       return this.$store.state.editor.openEditor;
     },
-    permissionsOpen(){
-      return this.$store.state.permissions.permissions
+    permissionsOpen() {
+      return this.$store.state.permissions.permissions;
     },
-    propertyOpen(){
-      return this.$store.state.permissions.property
+    propertyOpen() {
+      return this.$store.state.permissions.property;
     },
     item() {
       return this.$store.state.editor.folderToModify;
@@ -107,14 +120,22 @@ export default {
   },
   created() {
     this.$on("event", value => {
-      this.refresh(value);
+      this.refresh();
+    });
+    this.$nuxt.$on("refreshing", () => {
+      // this.refresh();
+        this.getRoot();
+
     });
   },
   mounted() {
     this.getRoot();
 
-    if(this.$store.state.localStorage.userId == null || this.$store.state.localStorage.user == null){
-      this.$router.push({name: 'login'})
+    if (
+      this.$store.state.localStorage.userId == null ||
+      this.$store.state.localStorage.user == null
+    ) {
+      this.$router.push({ name: "login" });
     }
   },
   methods: {

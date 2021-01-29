@@ -35,6 +35,7 @@ export const mutations = {
   CLEAN_CLIPBOARD(state) {
     state.clipboard = null;
     state.idClipboard = null;
+    state.typeClipboard= ""
   },
   SET_ACTIVE_POSITION(state, id) {
     state.activePosition = id;

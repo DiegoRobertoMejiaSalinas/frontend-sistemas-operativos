@@ -1,6 +1,14 @@
 import DeleteDirectory from "~/apollo/MUTATIONS/Directory/deleteDirectory.gql";
 import DeleteFile from "~/apollo/MUTATIONS/File/deleteFile.gql";
 
+// Directory
+import CreateDirectory from "~/apollo/MUTATIONS/Directory/createDirectory.gql";
+import UpdateDirectory from "~/apollo/MUTATIONS/Directory/updateDirectory.gql";
+
+// File
+import CreateFile from "~/apollo/MUTATIONS/File/createFile.gql";
+import UpdateFile from "~/apollo/MUTATIONS/File/updateFile.gql";
+
 export default {
   computed: {
     item() {
@@ -128,10 +136,200 @@ export default {
       this.$store.dispatch("editor/createFile");
     },
     paste() {
-      if (this.$store.state.editor.clipboard) {
+      if (this.$store.state.clipboard) {
+        if (
+          this.activeFolder &&
+          this.user.role.name == "admin" &&
+          !this.activeFolder.writableRoot
+        ) {
+          this.$toast.error(
+            "No cuentas con los permisos suficientes para pegar un archivo en este directorio",
+            { duration: 2000 }
+          );
+          return;
+        }
+        if (
+          this.activeFolder &&
+          this.user.role.name == "user" &&
+          !this.activeFolder.writableUser &&
+          this.userPermissions.id !== this.$store.state.localStorage.user.id
+        ) {
+          this.$toast.error(
+            "No cuentas con los permisos suficientes para pegar un archivo en este directorio",
+            { duration: 2000 }
+          );
+          return;
+        }
+        if (
+          this.activeFolder &&
+          this.user.role.name == "guest" &&
+          !this.activeFolder.writableGuest
+        ) {
+          this.$toast.error(
+            "No cuentas con los permisos suficientes para pegar un archivo en este directorio",
+            { duration: 2000 }
+          );
+          return;
+        }
       }
+
+      // SE REALIZA EL PEGADO
+      if (this.$store.state.typeClipboard == "cut") {
+        // SI ES ARCHIVO
+        if (typeof this.$store.state.clipboard.content != "undefined") {
+          const clipboard = this.$store.state.clipboard;
+          let input = {
+            name: clipboard.name,
+            id: parseInt(clipboard.id),
+            user: parseInt(clipboard.user.id),
+            content: clipboard.content,
+            belongsTo: this.actualPosition,
+            readableRoot: clipboard.readableRoot,
+            writableRoot: clipboard.writableRoot,
+            readableUser: clipboard.readableUser,
+            writableUser: clipboard.writableUser,
+            readableGuest: clipboard.readableGuest,
+            writableGuest: clipboard.writableGuest
+          };
+          this.$apollo
+            .mutate({
+              mutation: UpdateFile,
+              variables: { input }
+            })
+            .then(res => {
+              this.$nuxt.$emit("refreshing");
+              this.$toast.success(
+                "Se ha pegado satisfactoriamente el archivo",
+                {
+                  duration: 2000
+                }
+              );
+            });
+        }
+        // SI ES UN DIRECTORIO
+        else {
+          const clipboard = this.$store.state.clipboard;
+          let input = {
+            name: clipboard.name,
+            id: parseInt(clipboard.id),
+            user: parseInt(clipboard.user.id),
+            belongsTo: this.actualPosition,
+            readableRoot: clipboard.readableRoot,
+            writableRoot: clipboard.writableRoot,
+            readableUser: clipboard.readableUser,
+            writableUser: clipboard.writableUser,
+            readableGuest: clipboard.readableGuest,
+            writableGuest: clipboard.writableGuest
+          };
+          this.$apollo
+            .mutate({
+              mutation: UpdateDirectory,
+              variables: { input }
+            })
+            .then(res => {
+              this.$nuxt.$emit("refreshing");
+              this.$toast.success(
+                "Se ha pegado satisfactoriamente el directorio",
+                {
+                  duration: 2000
+                }
+              );
+            });
+        }
+      }
+      // SI ES COPIADO
+      else {
+        // SI ES ARCHIVO
+        if (typeof this.$store.state.clipboard.content != "undefined") {
+          const clipboard = this.$store.state.clipboard;
+          let input = {
+            name: clipboard.name,
+            user: parseInt(this.$store.state.localStorage.user.id),
+            content: clipboard.content,
+            belongsTo: this.actualPosition,
+            readableRoot: clipboard.readableRoot,
+            writableRoot: clipboard.writableRoot,
+            readableUser: clipboard.readableUser,
+            writableUser: clipboard.writableUser,
+            readableGuest: clipboard.readableGuest,
+            writableGuest: clipboard.writableGuest
+          };
+          this.$apollo
+            .mutate({
+              mutation: CreateFile,
+              variables: { input }
+            })
+            .then(res => {
+              this.$nuxt.$emit("refreshing");
+              this.$toast.success(
+                "Se ha pegado satisfactoriamente el archivo",
+                {
+                  duration: 2000
+                }
+              );
+            });
+        }
+        // SI ES UN DIRECTORIO
+        else {
+          const clipboard = this.$store.state.clipboard;
+          let input = {
+            name: clipboard.name,
+            user: parseInt(this.$store.state.localStorage.user.id),
+            belongsTo: this.actualPosition,
+            readableRoot: clipboard.readableRoot,
+            writableRoot: clipboard.writableRoot,
+            readableUser: clipboard.readableUser,
+            writableUser: clipboard.writableUser,
+            readableGuest: clipboard.readableGuest,
+            writableGuest: clipboard.writableGuest
+          };
+          this.$apollo
+            .mutate({
+              mutation: CreateDirectory,
+              variables: { input }
+            })
+            .then(res => {
+              this.$nuxt.$emit("refreshing");
+              this.$toast.success(
+                "Se ha pegado satisfactoriamente el directorio",
+                {
+                  duration: 2000
+                }
+              );
+            });
+        }
+      }
+
+      // LIMPIAMOS TODO
+      this.$store.commit("CLEAN_CLIPBOARD");
     },
     edit() {
+      if (this.user.role.name == "admin" && !this.item.writableRoot) {
+        this.$toast.error(
+          "No cuentas con los permisos suficientes para editar este archivo",
+          { duration: 2000 }
+        );
+        return;
+      }
+      if (
+        this.user.role.name == "user" &&
+        !this.item.writableUser &&
+        this.userPermissions.id !== this.$store.state.localStorage.user.id
+      ) {
+        this.$toast.error(
+          "No cuentas con los permisos suficientes para editar este archivo",
+          { duration: 2000 }
+        );
+        return;
+      }
+      if (this.user.role.name == "guest" && !this.item.writableGuest) {
+        this.$toast.error(
+          "No cuentas con los permisos suficientes para editar este archivo",
+          { duration: 2000 }
+        );
+        return;
+      }
+
       if (this.type == "folder") {
         this.$store.dispatch("editor/editFolder", this.item);
       } else {
@@ -142,6 +340,31 @@ export default {
       this.$store.dispatch("copyClipboard", this.item);
     },
     cut() {
+      if (this.user.role.name == "admin" && !this.item.writableRoot) {
+        this.$toast.error(
+          "No cuentas con los permisos suficientes para cortar este archivo",
+          { duration: 2000 }
+        );
+        return;
+      }
+      if (
+        this.user.role.name == "user" &&
+        !this.item.writableUser &&
+        this.userPermissions.id !== this.$store.state.localStorage.user.id
+      ) {
+        this.$toast.error(
+          "No cuentas con los permisos suficientes para cortar este archivo",
+          { duration: 2000 }
+        );
+        return;
+      }
+      if (this.user.role.name == "guest" && !this.item.writableGuest) {
+        this.$toast.error(
+          "No cuentas con los permisos suficientes para cortar este archivo",
+          { duration: 2000 }
+        );
+        return;
+      }
       this.$store.dispatch("cutClipboard", this.item);
     },
     delete() {
