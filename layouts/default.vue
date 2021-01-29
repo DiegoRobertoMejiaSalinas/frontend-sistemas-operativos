@@ -8,15 +8,37 @@
           </button>
           <div class="list-command" :class="!!activeStartbar ? 'active' : ''">
             <ul>
+              <hr />
               <li @click="openNotepad">Block de Notas</li>
               <!-- <li>Paint</li> -->
               <li @click="openCalculator">Calculadora</li>
+              <hr />
+              <li @click="openChess">Ajedrez</li>
+              <li @click="openCheckers">Damas</li>
+              <li @click="openExcel">Excel</li>
+              <li @click="openWord">Word</li>
+              <hr />
+              <li @click="openCutRope">Cut the Rope</li>
+              <li @click="openBubbles">Smarty Bubbles</li>
+              <li @click="openSolitarie">Solitario</li>
+              <hr />
+              <li @click="openMaps">Mapas</li>
+
+              <hr />
               <li @click="logout">Cerrar Sesión</li>
             </ul>
           </div>
         </div>
         <div class="second-section">
-          <p class="hour">Usuario: {{$store.state.localStorage && $store.state.localStorage.user ? $store.state.localStorage.user.name.toUpperCase() : ''}} | {{ time }}</p>
+          <p class="hour">
+            Usuario:
+            {{
+              $store.state.localStorage && $store.state.localStorage.user
+                ? $store.state.localStorage.user.name.toUpperCase()
+                : ""
+            }}
+            | {{ time }}
+          </p>
         </div>
       </div>
     </div>
@@ -51,11 +73,46 @@ export default {
         readableRoot: true,
         writableRoot: true,
         writableUser: true,
-        readableUser: this.$store.state.localStorage.user.role.name == "guest" ? true : false
+        readableUser:
+          this.$store.state.localStorage.user.role.name == "guest"
+            ? true
+            : false
       };
 
       this.$store.commit("permissions/SET_RULES", rules);
       this.$store.commit("apps/SET_NOTEPAD", true);
+    },
+    openMaps() {
+      this.activeStartbar = false;
+      this.$store.commit("apps/SET_MAPS", true);
+    },
+    openExcel() {
+      this.activeStartbar = false;
+      this.$store.commit("apps/SET_EXCEL", true);
+    },
+    openWord() {
+      this.activeStartbar = false;
+      this.$store.commit("apps/SET_WORD", true);
+    },
+    openChess() {
+      this.activeStartbar = false;
+      this.$store.commit("apps/SET_CHESS", true);
+    },
+    openCheckers() {
+      this.activeStartbar = false;
+      this.$store.commit("apps/SET_CHECKERS", true);
+    },
+    openCutRope() {
+      this.activeStartbar = false;
+      this.$store.commit("apps/SET_CUT_THE_ROPE", true);
+    },
+    openBubbles() {
+      this.activeStartbar = false;
+      this.$store.commit("apps/SET_BUBBLES", true);
+    },
+    openSolitarie() {
+      this.activeStartbar = false;
+      this.$store.commit("apps/SET_SOLITARIE", true);
     },
     openCalculator() {
       this.activeStartbar = false;

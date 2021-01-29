@@ -18,6 +18,18 @@
 
       <Property v-if="!!propertyOpen" />
       <Permissions v-if="!!permissionsOpen" @refresh="refresh" />
+
+      <!-- JUEGOS -->
+      <Chess />
+      <Checkers />
+      <CutTheRope />
+      <Solitarie />
+      <Bubbles />
+      <Excel />
+      <Word />
+
+      <!-- mapa -->
+      <Maps />
     </div>
 
     <vue-context
@@ -51,6 +63,16 @@ import Calculator from "~/components/apps/calculator.vue";
 import Paint from "~/components/apps/paint.vue";
 import Notepad from "~/components/apps/notepad.vue";
 import Browser from "~/components/shared/browser.vue";
+import Maps from "~/components/apps/maps.vue";
+import Excel from "~/components/apps/excel.vue";
+import Word from "~/components/apps/word.vue";
+
+// JUEGOS
+import Chess from "~/components/apps/ajedrez.vue";
+import Checkers from "~/components/apps/damas.vue";
+import CutTheRope from "~/components/apps/cutTheRope.vue";
+import Solitarie from "~/components/apps/solitarie.vue";
+import Bubbles from "~/components/apps/bubbles.vue";
 
 export default {
   components: {
@@ -62,7 +84,15 @@ export default {
     Notepad,
     Property,
     Browser,
-    Permissions
+    Permissions,
+    Chess,
+    Checkers,
+    CutTheRope,
+    Solitarie,
+    Bubbles,
+    Maps,
+    Excel,
+    Word
   },
   mixins: [ContextMenu],
   data() {

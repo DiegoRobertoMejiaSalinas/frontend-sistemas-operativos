@@ -154,7 +154,7 @@ export default {
 <style lang="scss" scoped>
 .property-wrapper {
   position: absolute;
-  z-index: 11;
+  z-index: 116;
   top: 50%;
   left: 50%;
   width: 450px;
