@@ -11,11 +11,13 @@
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.1-rc.5",
     "@nuxtjs/pwa": "^3.0.2",
+    "@nuxtjs/toast": "^3.3.1",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6",
     "nuxt-vuex-localstorage": "^1.2.7",
     "vue-context": "^6.0.0",
     "vue-froala-wysiwyg": "^3.2.5-1",
+    "vue-select": "^3.11.2",
     "vue-simple-context-menu": "^3.3.2",
     "vuesax": "^4.0.1-alpha.25"
   },

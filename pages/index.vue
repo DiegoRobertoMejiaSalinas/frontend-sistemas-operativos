@@ -101,6 +101,10 @@ export default {
   },
   mounted() {
     this.getRoot();
+
+    if(this.$store.state.localStorage.userId == null || this.$store.state.localStorage.user == null){
+      this.$router.push({name: 'login'})
+    }
   },
   methods: {
     refresh(id) {

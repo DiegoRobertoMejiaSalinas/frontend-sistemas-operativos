@@ -17,7 +17,8 @@ export default {
   plugins: [
     "@/plugins/vuesax",
     "@/plugins/vuecontext.js",
-    { src: "~/plugins/editor.js", mode: "client" }
+    { src: "~/plugins/editor.js", mode: "client" },
+    { src: "~/plugins/vueselect.js", mode: "client" }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -32,8 +33,23 @@ export default {
     "@nuxtjs/pwa",
     "@nuxtjs/style-resources",
     "@nuxtjs/apollo",
-    "nuxt-vuex-localstorage"
+    "nuxt-vuex-localstorage",
+    "@nuxtjs/toast"
   ],
+
+  toast: {
+    position: "bottom-center",
+    register: [
+      // Register custom toasts
+      {
+        name: "my-error",
+        message: "Oops...Something went wrong",
+        options: {
+          type: "error"
+        }
+      }
+    ]
+  },
 
   apollo: {
     clientConfigs: {

@@ -147,6 +147,9 @@ export default {
     user() {
       return this.$store.state.localStorage.userId;
     },
+    userComplete() {
+      return this.$store.state.localStorage.user;
+    },
     isEditing() {
       return this.$store.state.editor.isEditing;
     },
@@ -170,7 +173,7 @@ export default {
           readableUser: true,
           writableUser: true,
           readableGuest: true,
-          writableGuest: false
+          writableGuest: this.userComplete.role.name == "guest" ? true : false
         };
 
         if (this.type !== "folder") {

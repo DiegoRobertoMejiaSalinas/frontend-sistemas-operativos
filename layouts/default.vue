@@ -1,16 +1,17 @@
 <template>
   <div>
     <div class="navbar">
-
       <div class="navbar__actions">
         <div class="first-section">
-          <button class="inicio" @click="activeStartbar = !activeStartbar">Inicio</button>
+          <button class="inicio" @click="activeStartbar = !activeStartbar">
+            Inicio
+          </button>
           <div class="list-command" :class="!!activeStartbar ? 'active' : ''">
             <ul>
               <li @click="openNotepad">Block de Notas</li>
               <li>Paint</li>
               <li @click="openCalculator">Calculadora</li>
-              <li>Cerrar Sesión</li>
+              <li @click="logout">Cerrar Sesión</li>
             </ul>
           </div>
         </div>
@@ -20,20 +21,18 @@
       </div>
     </div>
     <div class="content">
-
       <Nuxt />
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
-  components: {  },
+  components: {},
   data() {
     return {
       time: null,
-      activeStartbar: false,
+      activeStartbar: false
     };
   },
   computed: {},
@@ -43,13 +42,13 @@ export default {
     }, 1000);
   },
   methods: {
-    openNotepad(){
-       this.activeStartbar= false
-      this.$store.commit("apps/SET_NOTEPAD", true)
+    openNotepad() {
+      this.activeStartbar = false;
+      this.$store.commit("apps/SET_NOTEPAD", true);
     },
-    openCalculator(){
-      this.activeStartbar= false
-      this.$store.commit("apps/SET_CALCULATOR", true)
+    openCalculator() {
+      this.activeStartbar = false;
+      this.$store.commit("apps/SET_CALCULATOR", true);
     },
     getTime() {
       var date = new Date();
@@ -58,6 +57,14 @@ export default {
       var hour = date.getHours();
 
       this.time = hour + ":" + minutes + ":" + seconds;
+    },
+    logout() {
+      this.$store.dispatch("localStorage/logout");
+      this.$router.push({ name: "login" });
+
+      this.$toast.success("Has cerrado sesión", {
+        duration: 2000
+      });
     }
   }
 };
@@ -87,16 +94,16 @@ export default {
         left: 0;
         bottom: 40px;
 
-        &.active{
+        &.active {
           pointer-events: all;
           opacity: 1;
         }
-        ul{
-          li{
+        ul {
+          li {
             padding: 10px 150px 10px 20px;
             background: $newdark;
             color: $white;
-            &:hover{
+            &:hover {
               background: $dark;
             }
           }
