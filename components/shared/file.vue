@@ -95,8 +95,30 @@ export default {
         this.notEnoughAccess();
         return;
       }
+
+
+      const {
+        readableGuest,
+        writableGuest,
+        readableRoot,
+        writableRoot,
+        writableUser,
+        readableUser
+      } = this.data;
+
+      let rules = {
+        readableGuest,
+        writableGuest,
+        readableRoot,
+        writableRoot,
+        writableUser,
+        readableUser
+      };
+      
+      this.$store.commit("permissions/SET_RULES", rules);
       this.$store.commit("apps/SET_NOTEPAD", true);
       this.$nuxt.$emit("set-notepad-data", data);
+
     },
     notEnoughAccess() {
       this.$toast.error(

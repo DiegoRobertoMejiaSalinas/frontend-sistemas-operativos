@@ -11,6 +11,9 @@ export default {
     },
     type() {
       return this.$store.state.editor.type;
+    },
+    user() {
+      return this.$store.state.localStorage.user;
     }
   },
   methods: {
@@ -81,6 +84,22 @@ export default {
       console.log(this.item);
       console.log(this.type);
 
+      if (this.user.name == "root") {
+        this.deleteApollo();
+      } else {
+        if (this.user.name == this.item.user.name) {
+          this.deleteApollo();
+        } else {
+          this.$toast.error(
+            `Solo el ADMINISTRADOR o el usuario ${this.item.user.name.toUpperCase()} pueden eliminar este archivo`,
+            { duration: 3000 }
+          );
+        }
+      }
+
+      return;
+    },
+    deleteApollo() {
       this.$apollo
         .mutate({
           mutation: this.type == "folder" ? DeleteDirectory : DeleteFile,
@@ -92,6 +111,9 @@ export default {
         })
         .then(res => {
           this.$parent.$emit("event", this.actualPosition);
+          this.$toast.error(`Se ha eliminado el archivo correctamente`, {
+            duration: 3000
+          });
         });
     },
     chmod() {

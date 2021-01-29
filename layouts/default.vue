@@ -44,6 +44,17 @@ export default {
   methods: {
     openNotepad() {
       this.activeStartbar = false;
+
+      let rules = {
+        readableGuest: true,
+        writableGuest: true,
+        readableRoot: true,
+        writableRoot: true,
+        writableUser: true,
+        readableUser: this.$store.state.localStorage.user.role.name == "guest" ? true : false
+      };
+
+      this.$store.commit("permissions/SET_RULES", rules);
       this.$store.commit("apps/SET_NOTEPAD", true);
     },
     openCalculator() {
