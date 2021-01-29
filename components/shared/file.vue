@@ -76,12 +76,33 @@ export default {
     },
     isCutClipboard() {
       return this.$store.state.typeClipboard == "cut";
+    },
+    user() {
+      return this.$store.state.localStorage.user;
     }
   },
   methods: {
     openNotepad(data) {
+      if (this.user.role.name == "root" && !this.data.readableRoot) {
+        this.notEnoughAccess();
+        return;
+      }
+      if (this.user.role.name == "user" && !this.data.readableUser) {
+        this.notEnoughAccess();
+        return;
+      }
+      if (this.user.role.name == "guest" && !this.data.readableGuest) {
+        this.notEnoughAccess();
+        return;
+      }
       this.$store.commit("apps/SET_NOTEPAD", true);
       this.$nuxt.$emit("set-notepad-data", data);
+    },
+    notEnoughAccess() {
+      this.$toast.error(
+        "No cuentas con los permisos suficientes para entrar a este archivo",
+        { duration: 2000 }
+      );
     },
     handleClick(event, item) {
       this.$store.dispatch("editor/setType", "file");

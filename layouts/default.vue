@@ -9,7 +9,7 @@
           <div class="list-command" :class="!!activeStartbar ? 'active' : ''">
             <ul>
               <li @click="openNotepad">Block de Notas</li>
-              <li>Paint</li>
+              <!-- <li>Paint</li> -->
               <li @click="openCalculator">Calculadora</li>
               <li @click="logout">Cerrar Sesión</li>
             </ul>

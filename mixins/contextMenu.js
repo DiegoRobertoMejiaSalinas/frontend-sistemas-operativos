@@ -95,10 +95,54 @@ export default {
         });
     },
     chmod() {
-      console.log("hoplaa");
+      this.$store.commit("permissions/SET_PROPERTY", false);
+
+      const {
+        readableGuest,
+        writableGuest,
+        readableRoot,
+        writableRoot,
+        writableUser,
+        readableUser
+      } = this.item;
+
+      let rules = {
+        readableGuest,
+        writableGuest,
+        readableRoot,
+        writableRoot,
+        writableUser,
+        readableUser
+      };
+
+      this.$store.commit("permissions/SET_OWNER", this.item.user.name);
+      this.$store.commit("permissions/SET_RULES", rules);
+      this.$store.commit("permissions/SET_PERMISSIONS", true);
     },
     chown() {
-      console.log("archivo");
+      this.$store.commit("permissions/SET_PERMISSIONS", false);
+
+      const {
+        readableGuest,
+        writableGuest,
+        readableRoot,
+        writableRoot,
+        writableUser,
+        readableUser
+      } = this.item;
+
+      let rules = {
+        readableGuest,
+        writableGuest,
+        readableRoot,
+        writableRoot,
+        writableUser,
+        readableUser
+      };
+
+      this.$store.commit("permissions/SET_OWNER", this.item.user.name);
+      this.$store.commit("permissions/SET_RULES", rules);
+      this.$store.commit("permissions/SET_PROPERTY", true);
     }
   }
 };

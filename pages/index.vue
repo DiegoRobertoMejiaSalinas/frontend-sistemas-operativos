@@ -11,6 +11,9 @@
 
       <Calculator />
       <Notepad @refresh="refresh" />
+
+      <Property v-if="!!propertyOpen" />
+      <Permissions v-if="!!permissionsOpen" />
     </div>
 
     <vue-context
@@ -36,6 +39,8 @@ import File from "~/components/shared/file.vue";
 import Directory from "~/components/shared/directory.vue";
 import Explorer from "~/components/shared/explorer.vue";
 import ModifyFolder from "~/components/shared/modifyFolder.vue";
+import Property from "~/components/shared/property.vue"
+import Permissions from "~/components/shared/permissions.vue"
 
 // Applications
 import Calculator from "~/components/apps/calculator.vue";
@@ -43,7 +48,7 @@ import Paint from "~/components/apps/paint.vue";
 import Notepad from "~/components/apps/notepad.vue";
 
 export default {
-  components: { Directory, Explorer, ModifyFolder, File, Calculator, Notepad },
+  components: { Directory, Explorer, ModifyFolder, File, Calculator, Notepad, Property, Permissions },
   mixins: [ContextMenu],
   data() {
     return {
@@ -57,6 +62,12 @@ export default {
     },
     editorOpen() {
       return this.$store.state.editor.openEditor;
+    },
+    permissionsOpen(){
+      return this.$store.state.permissions.permissions
+    },
+    propertyOpen(){
+      return this.$store.state.permissions.property
     },
     item() {
       return this.$store.state.editor.folderToModify;

@@ -27,8 +27,8 @@ export default {
   props: {
     data: {
       required: true,
-      type: Object,
-    },
+      type: Object
+    }
   },
   mixins: [ContextMenu],
   data() {
@@ -36,38 +36,38 @@ export default {
       options: [
         {
           name: "Editar",
-          slug: "edit",
+          slug: "edit"
         },
         {
-          type: "divider",
+          type: "divider"
         },
         {
           name: "Cortar",
-          slug: "cut",
+          slug: "cut"
         },
         {
           name: "Copiar",
-          slug: "copy",
+          slug: "copy"
         },
         {
-          type: "divider",
+          type: "divider"
         },
         {
           name: "Eliminar",
-          slug: "delete",
+          slug: "delete"
         },
         {
-          type: "divider",
+          type: "divider"
         },
         {
           name: "Permisos",
-          slug: "chmod",
+          slug: "chmod"
         },
         {
           name: "Propietario",
-          slug: "chown",
-        },
-      ],
+          slug: "chown"
+        }
+      ]
     };
   },
   computed: {
@@ -77,11 +77,33 @@ export default {
     isCutClipboard() {
       return this.$store.state.typeClipboard == "cut";
     },
+    user() {
+      return this.$store.state.localStorage.user;
+    }
   },
   methods: {
     openExplorer(data) {
+      if (this.user.role.name == "root" && !this.data.readableRoot) {
+        this.notEnoughAccess();
+        return;
+      }
+      if (this.user.role.name == "user" && !this.data.readableUser) {
+        this.notEnoughAccess();
+        return;
+      }
+      if (this.user.role.name == "guest" && !this.data.readableGuest) {
+        this.notEnoughAccess();
+        return;
+      }
+
       this.$store.dispatch("setActivePosition", data.id);
       this.$store.dispatch("openExplorer", data);
+    },
+    notEnoughAccess() {
+      this.$toast.error(
+        "No cuentas con los permisos suficientes para entrar a este directorio",
+        { duration: 2000 }
+      );
     },
     handleClick(event, item) {
       this.$store.dispatch("editor/setType", "folder");
@@ -90,8 +112,8 @@ export default {
     },
     optionClicked(event) {
       this.switchOption(event.option.slug);
-    },
-  },
+    }
+  }
 };
 </script>
 
