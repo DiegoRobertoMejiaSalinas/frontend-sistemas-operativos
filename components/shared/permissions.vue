@@ -98,7 +98,7 @@ export default {
       this.$store.commit("permissions/SET_PERMISSIONS", false);
     },
     savePermissions() {
-      if (this.user.name == "root") {
+      if (this.user.name == "root" || this.user.role.name == "admin") {
         this.saveApollo();
       } else {
         if (this.user.name == this.owner) {

@@ -18,7 +18,9 @@
         <p class="info">Ingrese el nuevo nombre</p>
         <input class="input" @keyup.enter="submit" type="text" v-model="name" />
         <button class="cancel" @click="closeModifierEditor">Cancelar</button>
-        <button class="submit" @click="submit">Crear</button>
+        <button class="submit" @click="submit">
+          {{ isEditing ? "Editar" : "Crear" }}
+        </button>
       </div>
     </div>
   </div>
@@ -155,6 +157,9 @@ export default {
     },
     selectedId() {
       return this.$store.state.editor.selectedId;
+    },
+    selectedFolder() {
+      return this.$store.state.editor.folderToModify;
     }
   },
   methods: {
@@ -164,17 +169,33 @@ export default {
     },
     submit() {
       if (this.name) {
-        let input = {
-          name: this.name,
-          user: this.user,
-          belongsTo: this.folderPosition,
-          readableRoot: true,
-          writableRoot: true,
-          readableUser: true,
-          writableUser: true,
-          readableGuest: true,
-          writableGuest: this.userComplete.role.name == "guest" ? true : false
-        };
+        let input = {};
+
+        if (this.isEditing) {
+          input = {
+            name: this.name,
+            user: this.user,
+            belongsTo: this.folderPosition,
+            readableRoot: this.selectedFolder.readableRoot,
+            writableRoot: this.selectedFolder.writableRoot,
+            readableUser: this.selectedFolder.readableUser,
+            writableUser: this.selectedFolder.writableUser,
+            readableGuest: this.selectedFolder.readableGuest,
+            writableGuest: this.selectedFolder.writableGuest
+          };
+        } else {
+          input = {
+            name: this.name,
+            user: this.user,
+            belongsTo: this.folderPosition,
+            readableRoot: true,
+            writableRoot: true,
+            readableUser: true,
+            writableUser: true,
+            readableGuest: true,
+            writableGuest: this.userComplete.role.name == "guest" ? true : false
+          };
+        }
 
         if (this.type !== "folder") {
           input = { ...input, content: "" };
@@ -186,7 +207,7 @@ export default {
 
         this.$apollo
           .mutate({
-            mutation: !!this.isEditing
+            mutation: this.isEditing
               ? this.type == "folder"
                 ? UpdateDirectory
                 : UpdateFile
